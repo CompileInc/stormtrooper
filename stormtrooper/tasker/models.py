@@ -19,7 +19,7 @@ class TaskQuerySet(models.QuerySet):
 class Task(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
-    csv = models.FileField(upload_to='tasks')
+    csv = models.FileField(upload_to='tasks/%Y/%m/%d/')
     answer_label = models.CharField(max_length=30, default="Answer")
 
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL)

@@ -64,3 +64,9 @@ target/
 # PyDev
 .project
 .pydevproject
+
+# Bower
+bower_components/
+
+# sqlite3
+*.sqlite3

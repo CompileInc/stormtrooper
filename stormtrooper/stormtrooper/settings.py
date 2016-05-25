@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+from django.conf.global_settings import STATICFILES_FINDERS
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -38,7 +39,9 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'stormtrooper',
     'tasker',
+    'djangobower',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -102,3 +105,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATICFILES_FINDERS = STATICFILES_FINDERS + ('djangobower.finders.BowerFinder',)
+
+BOWER_COMPONENTS_ROOT = '%s/components/' % (BASE_DIR)
+BOWER_INSTALLED_APPS = ['bulma#0.0.26']
+
+try:
+    from local_settings import *
+except ImportError:
+    pass

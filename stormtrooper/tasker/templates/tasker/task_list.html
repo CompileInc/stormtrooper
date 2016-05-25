@@ -1,0 +1,40 @@
+{% extends "stormtrooper/base.html" %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+      <h1 class="title">Open Tasks</h1>
+      <hr />
+      <div class="panel-body">
+        {% if task_list %}
+        <table class="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Title</th>
+              <th>No of questions</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for task in task_list %}
+            <tr>
+              <td>{{ task.id }}</td>
+              <td>{{ task.title }}</td>
+              <td>{{ task.description }}</td>
+              <td>
+                <a href="#" class="button is-success is-outlined">Start <span class="icon"><i class="fa fa-play-circle"></i></span></a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+          <div class="notification is-warning">
+            Sorry trooper, no open tasks
+          </div>
+        {% endif %}
+      </div>
+  </div>
+</section>
+{% endblock %}
