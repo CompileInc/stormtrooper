@@ -3,38 +3,43 @@
 {% block content %}
 <section class="section">
   <div class="container">
-      <h1 class="title">Open Tasks</h1>
-      <hr />
-      <div class="panel-body">
+    <div class="columns">
+      <div class="column is-8 is-offset-2">
+        <h1 class="title">Open Tasks</h1>
+        <hr />
         {% if task_list %}
-        <table class="table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Title</th>
-              <th>No of questions</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for task in task_list %}
-            <tr>
-              <td>{{ task.id }}</td>
-              <td>{{ task.title }}</td>
-              <td>{{ task.description }}</td>
-              <td>
-                <a href="#" class="button is-success is-outlined">Start <span class="icon"><i class="fa fa-play-circle"></i></span></a>
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+        <div class="box">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>No of questions</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for task in task_list %}
+              <tr>
+                <td>{{ task.id }}</td>
+                <td>{{ task.title }}</td>
+                <td>{{ task.no_of_questions }}</td>
+                <td>
+                  <a href="{% url 'task-detail' task.id %}" class="button is-info" title="Details"><i class="fa fa-ellipsis-h"></i></a>
+                  <a href="{% url 'task-play' task.id %}" class="button is-success" title="Start"><i class="fa fa-play-circle"></i></a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
         {% else %}
           <div class="notification is-warning">
-            Sorry trooper, no open tasks
+            <span class="icon"><i class="fa fa-exclamation-circle"></i></span> Sorry trooper, no open tasks
           </div>
         {% endif %}
       </div>
+    </div>
   </div>
 </section>
 {% endblock %}

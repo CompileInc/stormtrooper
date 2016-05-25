@@ -5,6 +5,7 @@ from django.core.validators import EMPTY_VALUES
 from django.db import models
 
 from jsonfield.fields import JSONField
+from django.utils.functional import cached_property
 
 
 class TaskQuerySet(models.QuerySet):
@@ -34,6 +35,20 @@ class Task(models.Model):
     def __unicode__(self):
         return self.title
 
+    @cached_property
+    def no_of_questions(self):
+        return self.question_set.all().count()
+
+    @cached_property
+    def choices(self):
+        return self.choice_set.all()
+
+    @cached_property
+    def is_multiple_choice(self):
+        if len(self.choices) > 0:
+            return True
+        return False
+
 
 class Choice(models.Model):
     task = models.ForeignKey(Task)
@@ -55,6 +70,9 @@ class Answer(models.Model):
     question = models.ForeignKey(Question)
     answer = JSONField()
     answered_by = models.ForeignKey(settings.AUTH_USER_MODEL)
+
+    class Meta:
+        unique_together = ('question', 'answered_by')
 
     def __unicode__(self):
         if self.answer['choice_id'] not in EMPTY_VALUES:
