@@ -8,24 +8,54 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
+        <link rel="apple-touch-icon" sizes="57x57" href="/static/images/apple-touch-icon-57x57.png">
+        <link rel="apple-touch-icon" sizes="60x60" href="/static/images/apple-touch-icon-60x60.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="/static/images/apple-touch-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="76x76" href="/static/images/apple-touch-icon-76x76.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="/static/images/apple-touch-icon-114x114.png">
+        <link rel="apple-touch-icon" sizes="120x120" href="/static/images/apple-touch-icon-120x120.png">
+        <link rel="apple-touch-icon" sizes="144x144" href="/static/images/apple-touch-icon-144x144.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="/static/images/apple-touch-icon-152x152.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/static/images/apple-touch-icon-180x180.png">
+        <link rel="icon" type="image/png" href="/static/images/favicon-32x32.png" sizes="32x32">
+        <link rel="icon" type="image/png" href="/static/images/android-chrome-192x192.png" sizes="192x192">
+        <link rel="icon" type="image/png" href="/static/images/favicon-96x96.png" sizes="96x96">
+        <link rel="icon" type="image/png" href="/static/images/favicon-16x16.png" sizes="16x16">
+        <link rel="manifest" href="/static/images/manifest.json">
+        <link rel="mask-icon" href="/static/images/safari-pinned-tab.svg" color="#5bbad5">
+        <meta name="msapplication-TileColor" content="#da532c">
+        <meta name="msapplication-TileImage" content="/static/images/mstile-144x144.png">
+        <meta name="theme-color" content="#ffffff">
+
         <link rel="stylesheet" href="{% static 'bulma/css/bulma.min.css' %}">
         <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
 
     </head>
     <body>
 
-    <div class="hero is-dark">
+    <div class="hero is-info">
       <div class="hero-head">
         <div class="container">
-          <nav class="nav" role="navigation">
-              <div class="nav-center">
-                <a class="nav-item" href="/">
-                  <img src="https://gitlab.com/uploads/project/avatar/1226578/stormtrooper-helmet-star-wars-the-force-awakens-00.jpeg" />
-                  <span class="subtitle is-5 is-white"> Stormtrooper</span>
-                </a>
-              </div>
-              <div id="navbar" class="navbar-collapse collapse"></div>
-          </nav>
+          <div class="columns">
+            <div class="column is-8 is-offset-2">
+              <nav class="nav" role="navigation">
+                <div class="nav-left">
+                  <a class="nav-item" href="/">
+                    <img src="https://gitlab.com/uploads/project/avatar/1226578/logo.png" />
+                    <span class="subtitle is-5 is-white">&nbsp; <strong>Stormtrooper</strong></span>
+                  </a>
+                </div>
+                <div class="nav-right">
+                  <span class="nav-item">
+                    {{ request.user.username }}
+                  </span>
+                  <span class="nav-item">
+                    <a href="#" class="button">Logout</a>
+                  </span>
+                </div>
+              </nav>
+            </div>
+          </div>
         </div>
       </div>
     </div>

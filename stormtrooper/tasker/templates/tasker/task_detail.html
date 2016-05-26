@@ -1,0 +1,48 @@
+{% extends "stormtrooper/base.html" %}
+{% load humanize %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-8 is-offset-2">
+        <small>{{ task.created_on }}</small>
+        <h1 class="title">{{ task.title }} 
+          {% if task.is_closed %}
+            <span class="tag is-danger">CLOSED</span>
+          {% elif task.is_active %}
+            <span class="tag is-primary">ACTIVE</span>
+          {% endif %}</h1>
+        <div class="box">
+        {{ task.description|linebreaks|safe }}
+        </div>
+        <nav class="level is-mobile box">
+          <div class="level-item has-text-centered">
+            <p class="heading">Questions</p>
+            <p class="title">{{ task.no_of_questions|intcomma }}</p>
+          </div>
+          <div class="level-item has-text-centered">
+            <p class="heading">Answered</p>
+            <p class="title">{{ anwered|default:0 }}</p>
+          </div>
+          <div class="level-item has-text-centered">
+            <p class="heading">Choice</p>
+            {% if task.is_multiple_choice %}
+            <p class="title"><i class="fa fa-check"></i></p>
+            {% else %}
+            <p class="title"><i class="fa fa-check"></i></p>
+            {% endif %}
+          </div>
+          {% if not task.is_closed and task.is_active %}
+          <div class="level-item has-text-centered">
+            <p class="title">
+              <a href="{% url 'task-play' task.id %}" class="button is-success is-outlined is-medium" title="Start"><i class="fa fa-play-circle"></i></a>
+            </p>
+          </div>
+          {% endif %}
+        </nav>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

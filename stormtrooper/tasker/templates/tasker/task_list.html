@@ -9,7 +9,7 @@
         <hr />
         {% if task_list %}
         <div class="box">
-          <table class="table">
+          <table class="table is-striped">
             <thead>
               <tr>
                 <th>ID</th>
@@ -22,7 +22,7 @@
               {% for task in task_list %}
               <tr>
                 <td>{{ task.id }}</td>
-                <td>{{ task.title }}</td>
+                <td><a href="{% url 'task-detail' task.id %}" title="{{ task.title }}">{{ task.title }}</a></td>
                 <td>{{ task.no_of_questions }}</td>
                 <td>
                   <a href="{% url 'task-detail' task.id %}" class="button is-info" title="Details"><i class="fa fa-ellipsis-h"></i></a>
