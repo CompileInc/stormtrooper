@@ -2,10 +2,11 @@ from __future__ import unicode_literals
 
 from django.conf import settings
 from django.core.validators import EMPTY_VALUES
-from django.db import models
+from django.db import models, transaction
 
 from jsonfield.fields import JSONField
 from django.utils.functional import cached_property
+import unicodecsv
 
 
 class TaskQuerySet(models.QuerySet):
@@ -30,6 +31,8 @@ class Task(models.Model):
     is_closed = models.BooleanField(default=False)
     closed_on = models.DateTimeField(blank=True, null=True)
 
+    is_questions_created = models.BooleanField(default=False)
+
     objects = TaskQuerySet.as_manager()
 
     def __unicode__(self):
@@ -48,6 +51,16 @@ class Task(models.Model):
         if len(self.choices) > 0:
             return True
         return False
+
+    @transaction.atomic
+    def process(self):
+        if not self.is_questions_created:
+            data = list(unicodecsv.DictReader(self.csv.file))
+            for d in data:
+                Question.objects.create(task=self,
+                                        question=d)
+            self.is_questions_created = True
+            self.save()
 
 
 class Choice(models.Model):
