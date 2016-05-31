@@ -53,13 +53,17 @@ class Task(models.Model):
         return False
 
     @transaction.atomic
-    def process(self):
+    def process(self, activate=False):
         if not self.is_questions_created:
             data = list(unicodecsv.DictReader(self.csv.file))
             for d in data:
                 Question.objects.create(task=self,
                                         question=d)
             self.is_questions_created = True
+
+            if activate:
+                self.is_active = True
+
             self.save()
 
 
