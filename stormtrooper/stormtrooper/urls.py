@@ -14,9 +14,19 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^$', 'stormtrooper.views.home', name='home'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^tasks/', include('tasker.urls')),
 ]
+
+if settings.DEBUG:
+    urlpatterns = urlpatterns + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+STORMTROOPER_ADMIN = 'Stormtrooper Admin'
+admin.site.site_header = STORMTROOPER_ADMIN
+admin.site.site_header = STORMTROOPER_ADMIN
+admin.site.index_title = STORMTROOPER_ADMIN
