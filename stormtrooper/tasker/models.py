@@ -8,6 +8,8 @@ from jsonfield.fields import JSONField
 from django.utils.functional import cached_property
 import unicodecsv
 from django.core.urlresolvers import reverse
+from django.utils.text import slugify
+import hashlib
 
 
 class TaskQuerySet(models.QuerySet):
@@ -95,6 +97,13 @@ class Choice(models.Model):
 class Question(models.Model):
     task = models.ForeignKey(Task)
     question = JSONField()
+    slug = models.SlugField(null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if self.slug in EMPTY_VALUES:
+            self.slug = hashlib.sha1(str(self.question)).hexdigest()
+
+        return super(Question, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return str(self.question)

@@ -36,6 +36,7 @@ class TaskAdmin(admin.ModelAdmin):
 
 class QuestionAdmin(admin.ModelAdmin):
     raw_id_fields = ('task',)
+    readonly_fields = ('task', 'question', 'slug')
 
 admin.site.register(Task, TaskAdmin)
 admin.site.register(Choice, ChoiceAdmin)
