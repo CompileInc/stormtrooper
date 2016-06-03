@@ -49,6 +49,34 @@
         </nav>
       </div>
     </div>
+    {% if request.user == task.created_by %}
+    <div class="columns">
+      <div class="column is-8 is-offset-2">
+        <div class="box">
+          <h3 class="title">Questions</h3>
+          <hr />
+          <table class="table is-striped">
+            <thead>
+              <tr>
+              {% for k in task.question_template %}
+                <th> {{ k }}</th>
+              {% endfor %}
+              </tr>
+            </thead>
+            <tbody>
+            {% for q in task.questions %}
+              <tr>
+              {% for k, qi in q.question.items %}
+                <td>{{ qi }}</td>
+              {% endfor %}
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    {% endif %}
   </div>
 </section>
 {% endblock %}

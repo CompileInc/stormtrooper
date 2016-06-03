@@ -7,6 +7,7 @@ from django.db import models, transaction
 from jsonfield.fields import JSONField
 from django.utils.functional import cached_property
 import unicodecsv
+from django.core.urlresolvers import reverse
 
 
 class TaskQuerySet(models.QuerySet):
@@ -38,9 +39,25 @@ class Task(models.Model):
     def __unicode__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return reverse('task-detail', args=[self.id])
+
+    @cached_property
+    def questions(self):
+        return self.question_set.all()
+
     @cached_property
     def no_of_questions(self):
-        return self.question_set.all().count()
+        return self.questions.count()
+
+    @cached_property
+    def question_template(self):
+        questions = self.questions
+        try:
+            template = questions[0].question.keys()
+        except IndexError:
+            template = {}
+        return template
 
     @cached_property
     def choices(self):
