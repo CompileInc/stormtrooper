@@ -1,5 +1,5 @@
 {% extends "stormtrooper/base.html" %}
-{% load humanize %}
+{% load humanize el_pagination_tags %}
 
 {% block content %}
 <section class="section">
@@ -64,7 +64,8 @@
               </tr>
             </thead>
             <tbody>
-            {% for q in task.questions %}
+            {% paginate task.questions as questions %}
+            {% for q in questions %}
               <tr>
               {% for k, qi in q.question.items %}
                 <td>{{ qi }}</td>
@@ -73,6 +74,7 @@
             {% endfor %}
             </tbody>
           </table>
+          {% show_pages %}
         </div>
       </div>
     </div>

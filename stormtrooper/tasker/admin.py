@@ -15,7 +15,7 @@ class TaskAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_on'
     exclude = ('created_by', )
     list_display = ('title', 'id', 'created_by', 'is_active', 'is_closed')
-    list_filter = ('is_active', 'is_closed', 'created_on', 'closed_on')
+    list_filter = ('is_active', 'is_closed', 'created_on')
     inlines = (ChoiceInline, )
     actions = ['generate_questions']
 
@@ -35,6 +35,7 @@ class TaskAdmin(admin.ModelAdmin):
 
 
 class QuestionAdmin(admin.ModelAdmin):
+    list_display = ('slug', 'task', 'question')
     raw_id_fields = ('task',)
     readonly_fields = ('task', 'question', 'slug')
 

@@ -32,8 +32,6 @@ class Task(models.Model):
 
     is_active = models.BooleanField(default=False)
     is_closed = models.BooleanField(default=False)
-    closed_on = models.DateTimeField(blank=True, null=True)
-
     is_questions_created = models.BooleanField(default=False)
 
     objects = TaskQuerySet.as_manager()
@@ -106,7 +104,7 @@ class Question(models.Model):
         return super(Question, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return str(self.question)
+        return str(self.slug)
 
 
 class Answer(models.Model):
