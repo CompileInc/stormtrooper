@@ -32,6 +32,7 @@ class Task(models.Model):
     is_active = models.BooleanField(default=False)
     is_closed = models.BooleanField(default=False)
     is_questions_created = models.BooleanField(default=False)
+    is_gamified = models.BooleanField(default=False)
 
     objects = TaskQuerySet.as_manager()
 
@@ -113,6 +114,17 @@ class Question(models.Model):
 
         return super(Question, self).save(*args, **kwargs)
 
+    def gamified_answer(self, answers):
+        # TODO: Implement the gamification
+        return answers[0]
+
+    def task_answer(self):
+        answers = self.answer_set.all()
+        answers = [a.data for a in answers]
+        if self.task.is_gamified:
+            answers.insert(0, self.gamified_answer(answers))
+        return answers
+
     def __unicode__(self):
         return str(self.slug)
 
@@ -132,6 +144,7 @@ class Answer(models.Model):
 
         return self.answer['verbose']
 
-    def exportable_data(self):
+    @property
+    def data(self):
         data = self.question.question
         data["answer_%s" % (self.answered_by.username)] = str(self)

@@ -5,10 +5,10 @@
   <div class="container">
     <div class="columns">
       <div class="column is-4 is-offset-4">
-        {% include "login/_login.html" %}
+      {% block message %}{% endblock message %}
+      {% include "login/_login.html" %}
       </div>
     </div>
   </div>
 </section>
 {% endblock %}
-
