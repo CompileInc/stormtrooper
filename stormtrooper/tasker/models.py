@@ -9,6 +9,7 @@ from django.utils.functional import cached_property
 import unicodecsv
 from django.core.urlresolvers import reverse
 import hashlib
+from collections import Counter
 
 
 class TaskQuerySet(models.QuerySet):
@@ -21,6 +22,8 @@ class TaskQuerySet(models.QuerySet):
 
 
 class Task(models.Model):
+    MIN_TO_ANSWER = 2
+
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
     csv = models.FileField(upload_to='tasks/%Y/%m/%d/')
@@ -32,7 +35,8 @@ class Task(models.Model):
     is_active = models.BooleanField(default=False)
     is_closed = models.BooleanField(default=False)
     is_questions_created = models.BooleanField(default=False)
-    is_gamified = models.BooleanField(default=False)
+    is_best_of = models.BooleanField(default=False,
+                                     help_text="Check this if you want to run best-of-n. Default: max-of-n")
 
     objects = TaskQuerySet.as_manager()
 
@@ -114,15 +118,26 @@ class Question(models.Model):
 
         return super(Question, self).save(*args, **kwargs)
 
-    def gamified_answer(self, answers):
-        # TODO: Implement the gamification
-        return answers[0]
+    def compute_answer(self, answers, is_best_of):
+        if len(answers) < Task.MIN_TO_ANSWER:
+            answer = None
+        else:
+            most_common = Counter(answers).most_common(1)
+            if is_best_of:
+                cutoff = max(len(answers) / 2 + 1, Task.MIN_TO_ANSWER)
+                if most_common[1] >= cutoff:
+                    answer = most_common[0]
+                else:
+                    answer = None
+            else:
+                answer = most_common[0]
+        return {'TASK_%s_ANSWER' % (self.task.id): answer}
 
-    def task_answer(self):
+    @property
+    def answer(self):
         answers = self.answer_set.all()
         answers = [a.data for a in answers]
-        if self.task.is_gamified:
-            answers.insert(0, self.gamified_answer(answers))
+        answers.insert(0, self.compute_answer(answers, self.task.is_best_of))
         return answers
 
     def __unicode__(self):
@@ -147,4 +162,4 @@ class Answer(models.Model):
     @property
     def data(self):
         data = self.question.question
-        data["answer_%s" % (self.answered_by.username)] = str(self)
+        data["USER_%s_ANSWER" % (self.answered_by.username)] = str(self)
