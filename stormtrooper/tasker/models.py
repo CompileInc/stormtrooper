@@ -8,7 +8,6 @@ from jsonfield.fields import JSONField
 from django.utils.functional import cached_property
 import unicodecsv
 from django.core.urlresolvers import reverse
-from django.utils.text import slugify
 import hashlib
 
 
