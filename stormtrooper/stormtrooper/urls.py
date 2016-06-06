@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^tasks/', include('tasker.urls')),
     url(r'^accounts/', include('login.urls')),
+    url('', include('social.apps.django_app.urls', namespace='social')),
 ]
 
 if settings.DEBUG:

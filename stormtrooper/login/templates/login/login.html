@@ -8,10 +8,6 @@
 </style>
 {% endblock extra_css %}
 
-{% block extra_head %}
-<meta name="google-signin-scope" content="email profile">
-<meta name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com">
-{% endblock extra_head %}
 
 {% block content %}
 <section class="section">
@@ -21,7 +17,7 @@
       <div class="box has-text-centered login">
         <h1 class="title">Login</h1>
         <hr />
-        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+        <a class="button is-primary" href="{% url 'social:begin' 'google-oauth2' %}">Sign in with google</a>
       </div>
       </div>
     </div>
@@ -29,4 +25,3 @@
 </section>
 {% endblock %}
 
-{% block extra_js %}<script src="//apis.google.com/js/platform.js" async defer></script>{% endblock %}

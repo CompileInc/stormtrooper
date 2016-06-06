@@ -12,7 +12,8 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-from django.conf.global_settings import STATICFILES_FINDERS
+from django.conf.global_settings import STATICFILES_FINDERS,\
+    AUTHENTICATION_BACKENDS
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -39,6 +40,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
+    'social.apps.django_app.default',
 
     'stormtrooper',
     'login',
@@ -58,6 +60,11 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.security.SecurityMiddleware',
 )
 
+AUTHENTICATION_BACKENDS = (
+    'social.backends.google.GoogleOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+    )
+
 ROOT_URLCONF = 'stormtrooper.urls'
 
 TEMPLATES = [
@@ -72,6 +79,8 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.core.context_processors.request',
+                'social.apps.django_app.context_processors.backends',
+                'social.apps.django_app.context_processors.login_redirect',
             ],
         },
     },
@@ -106,6 +115,13 @@ USE_TZ = True
 
 # Custom user model
 AUTH_USER_MODEL = 'login.CustomUser'
+
+# Python social auth settings
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = 'my-google-key'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'my-google-secret'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/tasks'
+SOCIAL_AUTH_USER_MODEL = AUTH_USER_MODEL
+SOCIAL_AUTH_LOGIN_URL = 'accounts/login/'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/

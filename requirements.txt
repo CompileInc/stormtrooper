@@ -2,5 +2,6 @@ Django==1.9.6
 django-bower==5.1.0
 django-el-pagination==2.1.2
 jsonfield==1.0.3
+python-social-auth==0.2.19
 pytz==2016.4
 unicodecsv==0.14.1
