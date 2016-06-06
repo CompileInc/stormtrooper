@@ -21,6 +21,7 @@ urlpatterns = [
     url(r'^$', 'stormtrooper.views.home', name='home'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^tasks/', include('tasker.urls')),
+    url(r'^accounts/', include('login.urls')),
 ]
 
 if settings.DEBUG:
