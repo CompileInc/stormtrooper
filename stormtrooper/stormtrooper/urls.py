@@ -16,13 +16,13 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
+from stormtrooper.views import home as home_view
 
 urlpatterns = [
-    url(r'^$', 'stormtrooper.views.home', name='home'),
+    url(r'^$', home_view, name='home'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^tasks/', include('tasker.urls')),
     url(r'^accounts/', include('login.urls')),
-    url('', include('social.apps.django_app.urls', namespace='social')),
 ]
 
 if settings.DEBUG:
