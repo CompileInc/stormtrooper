@@ -55,6 +55,8 @@ coverage.xml
 # Django stuff:
 *.log
 media/
+static/
+stormtrooper/stormtrooper/static/
 
 # Sphinx documentation
 docs/_build/
@@ -71,3 +73,6 @@ bower_components/
 
 # sqlite3
 *.sqlite3
+
+# Mac stuff
+.DS_Store
