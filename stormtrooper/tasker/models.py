@@ -83,6 +83,17 @@ class Task(models.Model):
 
             self.save()
 
+    def random_question(self, user=None):
+        '''
+        Responds with a random un-answered question for that user
+        if user is None, returns a random question.
+        '''
+        questions = self.questions
+        if user:
+            answered_qs = self.answer_set.filter(answered_by=user).values_id('question')
+            questions = questions.exclude(id__in=answered_qs)
+        return questions.order_by('?').first()
+
 
 class Choice(models.Model):
     task = models.ForeignKey(Task)
