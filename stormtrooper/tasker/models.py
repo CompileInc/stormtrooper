@@ -104,7 +104,7 @@ class Task(models.Model):
         '''
         questions = self.questions
         if user:
-            answered_qs = self.answer_set.filter(answered_by=user).values_id('question')
+            answered_qs = Answer.objects.filter(question__in=questions, answered_by=user).values_list('question__id', flat=True)
             questions = questions.exclude(id__in=answered_qs)
         return questions.order_by('?').first()
 
@@ -152,6 +152,9 @@ class Question(models.Model):
                 answer = most_common[0]
         return {'TASK_%s_ANSWER' % (self.task.id): answer}
 
+    def get_absolute_url(self):
+        return reverse('question-detail', args=[self.slug])
+
     @property
     def answer(self):
         answers = self.answer_set.all()
@@ -173,8 +176,8 @@ class Answer(models.Model):
 
     def __unicode__(self):
         if self.answer['choice_id'] not in EMPTY_VALUES:
-            return Choice.objects.get(task=self.question.task,
-                                      id=int(self.answer['choice_id']))
+            return unicode(Choice.objects.get(task=self.question.task,
+                                      id=int(self.answer['choice_id'])))
 
         return self.answer['verbose']
 
