@@ -27,7 +27,7 @@
                 <td>{{ task.id }}</td>
                 <td><a href="{{ task.get_absolute_url }}" title="{{ task.title }}">{{ task.title }}</a></td>
                 <td>{{ task.no_of_questions }}</td>
-                <td>{% if not task.is_closed %}<span class="tag is-small is-danger">CLOSED</span>{% endif %}</td>
+                <td>{% if task.is_closed %}<span class="tag is-small is-danger">CLOSED</span>{% endif %}</td>
                 <td>
                   <a href="{{ task.get_absolute_url }}" class="button is-info" title="Details"><i class="fa fa-ellipsis-h"></i></a>
                   <a href="{% url 'task-play' task.id %}" class="button is-success" title="Start"><i class="fa fa-play-circle"></i></a>

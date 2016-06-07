@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib import admin, messages
+from django.db.models.fields import BLANK_CHOICE_DASH
 from tasker.models import Task, Choice, Question, Answer
 from plugins import ALL_PLUGIN_CHOICES
 
@@ -14,7 +15,7 @@ class ChoiceInline(admin.TabularInline):
 
 
 class TaskAdminForm(forms.ModelForm):
-    answer_plugin = forms.ChoiceField(choices=ALL_PLUGIN_CHOICES)
+    answer_plugin = forms.ChoiceField(choices=BLANK_CHOICE_DASH + ALL_PLUGIN_CHOICES, required=False)
 
 
 class TaskAdmin(admin.ModelAdmin):
