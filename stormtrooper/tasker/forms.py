@@ -1,7 +1,7 @@
 from django import forms
 
 class TextAnswerForm(forms.Form):
-    answer = forms.CharField()
+    answer = forms.CharField(widget=forms.Textarea)
 
 class ChoiceAnswerForm(forms.Form):
     answer_choice = forms.ModelChoiceField(queryset=None)
@@ -10,4 +10,4 @@ class ChoiceAnswerForm(forms.Form):
         super(ChoiceAnswerForm, self).__init__(*args, **kwargs)
         if task:
             qs = task.choices
-            self.fields['answer_choice'] = forms.ModelChoiceField(queryset=qs)
+            self.fields['answer_choice'] = forms.ModelChoiceField(queryset=qs, widget=forms.RadioSelect)

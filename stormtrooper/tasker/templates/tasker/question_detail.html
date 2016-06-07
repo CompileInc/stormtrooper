@@ -1,5 +1,6 @@
 {% extends "stormtrooper/base.html" %}
 {% load humanize el_pagination_tags %}
+{% load addcss %}
 
 {% block content %}
 <section class="section">
@@ -23,32 +24,44 @@
         {{ question.task.description|linebreaks|safe }}
         </div>
         <div class="box">
-            <div class="columns">
-                <div class="column is-8 is-offset-2">
-                    <table class="table is-bordered is-striped">
-                        <thead>
-                            <tr>
-                                <th> Desciption </th>
-                                <th> Value </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for k,v in question.question.items %}
-                            <tr>
-                                <td>{{ k }}</td>
-                                <td>{{ v }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+            <table class="table is-striped">
+                <thead>
+                    <tr>
+                        <th> Desciption </th>
+                        <th> Value </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for k,v in question.question.items %}
+                    <tr>
+                        <td>{{ k }}</td>
+                        <td>{{ v }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
         <div class="box">
             <form action="{{ question.get_absolute_url }}" method="post">
                 {% csrf_token %}
-                {{ form }}
-                <button type="submit">Submit</button>
+                {% if question.task.is_multiple_choice %}
+                <label class="label">
+                    {{ form.answer_choice.label_tag }}
+                </label>
+                <p class="control">
+                   {{ form.answer_choice | addcss:"radio" }}
+                </p>
+                {% else %}
+                <label class="label">
+                    {{ form.answer.label_tag }}
+                </label>
+                <p class="control">
+                    {{ form.answer | addcss:"textarea" }}
+                </p>
+                {% endif %}
+                <p class="control">
+                    <button class="button is-primary">Submit</button>
+                </p>
             </form>
         </div>
       </div>
