@@ -98,6 +98,15 @@ class Task(models.Model):
             questions = questions.exclude(id__in=answered_qs)
         return questions.order_by('?').first()
 
+    @property
+    def answers(self):
+        answers = []
+        for question in self.questions:
+            row = question.question.copy()
+            row.update(question.answer)
+            answers.append(row)
+        return answers
+
 
 class Choice(models.Model):
     task = models.ForeignKey(Task)
@@ -120,7 +129,7 @@ class Question(models.Model):
 
     def compute_answer(self, answers, is_best_of):
         if len(answers) < Task.MIN_TO_ANSWER:
-            answer = None
+            answer = ""
         else:
             most_common = Counter(answers).most_common(1)
             if is_best_of:
@@ -128,7 +137,7 @@ class Question(models.Model):
                 if most_common[1] >= cutoff:
                     answer = most_common[0]
                 else:
-                    answer = None
+                    answer = ""
             else:
                 answer = most_common[0]
         return {'TASK_%s_ANSWER' % (self.task.id): answer}
