@@ -1,4 +1,4 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 from tasker.models import Task, Choice, Question, Answer
 
 
@@ -20,8 +20,18 @@ class TaskAdmin(admin.ModelAdmin):
     actions = ['generate_questions']
 
     def save_model(self, request, obj, form, change):
+        user = request.user
         if getattr(obj, 'created_by', None) is None:
-            obj.created_by = request.user
+            obj.created_by = user
+        if change and form.is_valid():
+            if 'is_closed' in form.changed_data:
+                is_closed = form.cleaned_data['is_closed']
+                if user.is_superuser or (user == obj.created_by and is_closed):
+                    obj.is_closed = is_closed
+                else:
+                    obj.is_closed = not is_closed
+                    message = "You don't have permission to change task status"
+                    self.message_user(request, message, level=messages.ERROR)
         obj.save()
 
     def generate_questions(self, request, queryset):
