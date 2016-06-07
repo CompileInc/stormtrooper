@@ -15,7 +15,8 @@ class ChoiceInline(admin.TabularInline):
 
 
 class TaskAdminForm(forms.ModelForm):
-    answer_plugin = forms.ChoiceField(choices=BLANK_CHOICE_DASH + ALL_PLUGIN_CHOICES, required=False)
+    answer_plugin = forms.ChoiceField(choices=BLANK_CHOICE_DASH + ALL_PLUGIN_CHOICES,
+                                      required=False)
 
 
 class TaskAdmin(admin.ModelAdmin):

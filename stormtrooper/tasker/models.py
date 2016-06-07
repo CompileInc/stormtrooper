@@ -11,7 +11,7 @@ from django.core.urlresolvers import reverse
 import hashlib
 from collections import Counter
 
-from .plugins import initialize_plugins
+from .plugins import initialize_plugins, get_plugin
 initialize_plugins()
 
 
@@ -138,6 +138,9 @@ class Question(models.Model):
         return super(Question, self).save(*args, **kwargs)
 
     def compute_answer(self, answers, is_best_of):
+        if self.task.answer_plugin:
+            answers = get_plugin(self.task.answer_plugin).process(answers)
+
         if len(answers) < Task.MIN_TO_ANSWER:
             answer = ""
         else:
@@ -177,7 +180,7 @@ class Answer(models.Model):
     def __unicode__(self):
         if self.answer['choice_id'] not in EMPTY_VALUES:
             return unicode(Choice.objects.get(task=self.question.task,
-                                      id=int(self.answer['choice_id'])))
+                                              id=int(self.answer['choice_id'])))
 
         return self.answer['verbose']
 

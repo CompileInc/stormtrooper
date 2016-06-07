@@ -1,6 +1,8 @@
 class Plugin(object):
+    @classmethod
     def process(self, answers):
-        raise NotImplementedError("Implement the function in the custom plugin")
+        '''Implement your answer normalization/manipulation here'''
+        return answers
 
 
 def all_subclasses(cls):
@@ -35,3 +37,8 @@ def initialize_plugins():
     for plugin in ALL_PLUGINS:
         ALL_PLUGIN_MAP[plugin.plugin_name] = plugin
         ALL_PLUGIN_CHOICES.append([plugin.plugin_name, plugin.plugin_name_verbose])
+
+
+def get_plugin(plugin_name):
+    global ALL_PLUGIN_MAP
+    return ALL_PLUGIN_MAP[plugin_name]
