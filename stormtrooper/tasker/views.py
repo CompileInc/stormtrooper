@@ -33,7 +33,9 @@ class TaskPlayView(View):
             task_obj = Task.objects.get(pk=pk)
             if not task_obj.is_closed:
                 random_qn = task_obj.random_question(user=request.user)
-                return HttpResponseRedirect(random_qn.get_absolute_url())
+                if random_qn:
+                    return HttpResponseRedirect(random_qn.get_absolute_url())
+                #TODO show message saying no more unanswered questions
             return HttpResponseRedirect(reverse('task-list'))
         except Task.DoesNotExist:
             return Http404
