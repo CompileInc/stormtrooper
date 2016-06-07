@@ -12,15 +12,37 @@
         </h1>
       </div>
       <div class="column is-8">
-        <small>{{ question.created_on }}</small>
-        <h1 class="title">{{ task.title }} 
+        <small>{{ question.task.created_on }}</small>
+        <h1 class="title">{{ question.task.title }}
           {% if question.task.is_closed %}
             <span class="tag is-danger">CLOSED</span>
           {% elif question.task.is_active %}
             <span class="tag is-success">ACTIVE</span>
           {% endif %}</h1>
         <div class="box">
-        {{ question.question|linebreaks|safe }}
+        {{ question.task.description|linebreaks|safe }}
+        </div>
+        <div class="box">
+            <div class="columns">
+                <div class="column is-8 is-offset-2">
+                    <table class="table is-bordered is-striped">
+                        <thead>
+                            <tr>
+                                <th> Desciption </th>
+                                <th> Value </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for k,v in question.question.items %}
+                            <tr>
+                                <td>{{ k }}</td>
+                                <td>{{ v }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
       </div>
     </div>
