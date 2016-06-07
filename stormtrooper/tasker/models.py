@@ -72,6 +72,12 @@ class Task(models.Model):
     def choices(self):
         return self.choice_set.all()
 
+    @property
+    def answered(self):
+        questions = self.questions
+        answered = Answer.objects.filter(question__in=questions).exclude(answered_by=None).count()
+        return answered
+
     @cached_property
     def is_multiple_choice(self):
         if len(self.choices) > 0:
