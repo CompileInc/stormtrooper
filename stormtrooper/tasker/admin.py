@@ -1,5 +1,8 @@
+from django import forms
 from django.contrib import admin, messages
+from django.db.models.fields import BLANK_CHOICE_DASH
 from tasker.models import Task, Choice, Question, Answer
+from plugins import ALL_PLUGIN_CHOICES
 
 
 class ChoiceAdmin(admin.ModelAdmin):
@@ -11,6 +14,11 @@ class ChoiceInline(admin.TabularInline):
     model = Choice
 
 
+class TaskAdminForm(forms.ModelForm):
+    answer_plugin = forms.ChoiceField(choices=BLANK_CHOICE_DASH + ALL_PLUGIN_CHOICES,
+                                      required=False)
+
+
 class TaskAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_on'
     exclude = ('created_by', )
@@ -18,6 +26,7 @@ class TaskAdmin(admin.ModelAdmin):
     list_filter = ('is_active', 'is_closed', 'created_on')
     inlines = (ChoiceInline, )
     actions = ['generate_questions']
+    form = TaskAdminForm
 
     def save_model(self, request, obj, form, change):
         user = request.user

@@ -11,6 +11,9 @@ from django.core.urlresolvers import reverse
 import hashlib
 from collections import Counter
 
+from .plugins import initialize_plugins, get_plugin
+initialize_plugins()
+
 
 class TaskQuerySet(models.QuerySet):
     def active(self):
@@ -42,6 +45,8 @@ class Task(models.Model):
     is_questions_created = models.BooleanField(default=False)
     is_best_of = models.BooleanField(default=False,
                                      help_text="Check this if you want to run best-of-n. Default: max-of-n")
+
+    answer_plugin = models.CharField(max_length=5, blank=True, null=True)
 
     objects = TaskQuerySet.as_manager()
 
@@ -139,6 +144,9 @@ class Question(models.Model):
         return super(Question, self).save(*args, **kwargs)
 
     def compute_answer(self, answers, is_best_of):
+        if self.task.answer_plugin:
+            answers = get_plugin(self.task.answer_plugin).process(answers)
+
         if len(answers) < Task.MIN_TO_ANSWER:
             answer = ""
         else:
@@ -178,7 +186,7 @@ class Answer(models.Model):
     def __unicode__(self):
         if self.answer['choice_id'] not in EMPTY_VALUES:
             return unicode(Choice.objects.get(task=self.question.task,
-                                      id=int(self.answer['choice_id'])))
+                                              id=int(self.answer['choice_id'])))
 
         return self.answer['verbose']
 
