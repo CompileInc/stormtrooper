@@ -11,6 +11,9 @@ from django.core.urlresolvers import reverse
 import hashlib
 from collections import Counter
 
+from .plugins import initialize_plugins
+initialize_plugins()
+
 
 class TaskQuerySet(models.QuerySet):
     def active(self):
@@ -42,6 +45,8 @@ class Task(models.Model):
     is_questions_created = models.BooleanField(default=False)
     is_best_of = models.BooleanField(default=False,
                                      help_text="Check this if you want to run best-of-n. Default: max-of-n")
+
+    answer_plugin = models.CharField(max_length=5, blank=True, null=True)
 
     objects = TaskQuerySet.as_manager()
 
