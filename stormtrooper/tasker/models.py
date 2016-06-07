@@ -168,8 +168,8 @@ class Answer(models.Model):
 
     def __unicode__(self):
         if self.answer['choice_id'] not in EMPTY_VALUES:
-            return Choice.objects.get(task=self.question.task,
-                                      id=int(self.answer['choice_id']))
+            return unicode(Choice.objects.get(task=self.question.task,
+                                      id=int(self.answer['choice_id'])))
 
         return self.answer['verbose']
 
