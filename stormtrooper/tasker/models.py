@@ -14,8 +14,13 @@ from collections import Counter
 
 class TaskQuerySet(models.QuerySet):
     def active(self):
+        '''Normal users'''
         return self.filter(is_active=True,
                            is_closed=False)
+
+    def all_active(self):
+        '''Admin users'''
+        return self.filter(is_active=True)
 
     def closed(self):
         return self.filter(is_closed=True)

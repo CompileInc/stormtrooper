@@ -7,6 +7,8 @@ class TaskListView(ListView):
     model = Task
 
     def get_queryset(self):
+        if self.model.created_by is self.request.user:
+            return self.model.objects.all_active()
         return self.model.objects.active()
 
 
