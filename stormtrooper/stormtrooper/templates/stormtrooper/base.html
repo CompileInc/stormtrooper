@@ -59,7 +59,7 @@
                     {{ request.user.username }}
                   </span>
                   <span class="nav-item">
-                    <a href="#" class="button">Logout</a>
+                    <a href="{% url 'accounts-logout' %}" class="button">Logout</a>
                   </span>
                 </div>
                 {% endif %}

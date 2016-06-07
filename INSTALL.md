@@ -4,3 +4,4 @@
     cd stormtrooper
     python manage.py migrate
     python manage.py bower install
+    python manage.py createsuperuser
