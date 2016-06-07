@@ -1,9 +1,12 @@
 from django.views.generic.list import ListView
-from tasker.models import Task, Question
 from django.views.generic.detail import DetailView
+from django.views.generic.edit import FormMixin
 from django.views.generic import View
 from django.http.response import Http404, HttpResponseRedirect
 from django.core.urlresolvers import reverse
+
+from tasker.models import Task, Question
+from tasker.forms import TextAnswerForm, ChoiceAnswerForm
 
 
 class TaskListView(ListView):
@@ -12,7 +15,10 @@ class TaskListView(ListView):
     def get_queryset(self):
         if self.request.user.is_superuser:
             return self.model.objects.all_active()
-        return self.model.objects.active()
+        elif self.model.objects.filter(created_by=self.request.user).exists():
+            return self.model.objects.all_active().filter(created_by=self.request.user)
+        else:
+            return self.model.objects.active()
 
 
 class TaskDetailView(DetailView):
@@ -32,5 +38,17 @@ class TaskPlayView(View):
             return Http404
 
 
-class QuestionDetailView(DetailView):
+class QuestionDetailView(DetailView, FormMixin):
     model = Question
+
+    def get_form(self, form_class=None):
+        question = self.get_object()
+        task = question.task
+        kwargs = self.get_form_kwargs()
+        if form_class is None:
+            if task.is_multiple_choice:
+                return ChoiceAnswerForm(task=task, **kwargs)
+            else:
+                return TextAnswerForm(**kwargs)
+        else:
+            return form_class(**kwargs)
