@@ -99,7 +99,7 @@ class Task(models.Model):
         '''
         questions = self.questions
         if user:
-            answered_qs = self.answer_set.filter(answered_by=user).values_id('question')
+            answered_qs = Answer.objects.filter(question__in=questions, answered_by=user).values_list('question__id', flat=True)
             questions = questions.exclude(id__in=answered_qs)
         return questions.order_by('?').first()
 
