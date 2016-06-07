@@ -1,11 +1,12 @@
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import FormMixin
+from django.views.generic.edit import FormMixin, ProcessFormView
 from django.views.generic import View
 from django.http.response import Http404, HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from django.utils.encoding import force_text
 
-from tasker.models import Task, Question
+from tasker.models import Task, Question, Answer
 from tasker.forms import TextAnswerForm, ChoiceAnswerForm
 
 
@@ -38,12 +39,18 @@ class TaskPlayView(View):
             return Http404
 
 
-class QuestionDetailView(DetailView, FormMixin):
+class QuestionDetailView(DetailView, FormMixin, ProcessFormView):
     model = Question
 
+    def get_success_url(self):
+        # TODO: redirect to next unanswered question
+        if self.object:
+            return force_text(self.object.get_absolute_url())
+
     def get_form(self, form_class=None):
-        question = self.get_object()
-        task = question.task
+        # TODO: notify if question has already been answered
+        self.object = self.get_object()
+        task = self.object.task
         kwargs = self.get_form_kwargs()
         if form_class is None:
             if task.is_multiple_choice:
@@ -52,3 +59,20 @@ class QuestionDetailView(DetailView, FormMixin):
                 return TextAnswerForm(**kwargs)
         else:
             return form_class(**kwargs)
+
+    def form_valid(self, form):
+        if self.object:
+            data = form.cleaned_data
+            user = self.request.user
+            task = self.object.task
+            if task.is_multiple_choice:
+                choice_obj = data.get('answer_choice')
+                choice_id = choice_obj.pk
+                choice_verbose = choice_obj.name
+                answer = {'choice_id': choice_id,
+                          'verbose': choice_verbose}
+            else:
+                answer = {'verbose': data.get('answer')}
+            defaults = {'answer': answer}
+            _ans_obj, _created = Answer.objects.get_or_create(question=self.object, answered_by=user, defaults=defaults)
+        return super(QuestionDetailView, self).form_valid(form)

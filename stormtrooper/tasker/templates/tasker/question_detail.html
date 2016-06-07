@@ -45,7 +45,11 @@
             </div>
         </div>
         <div class="box">
-            {{ form }}
+            <form action="{{ question.get_absolute_url }}" method="post">
+                {% csrf_token %}
+                {{ form }}
+                <button type="submit">Submit</button>
+            </form>
         </div>
       </div>
     </div>
