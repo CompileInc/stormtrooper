@@ -147,6 +147,9 @@ class Question(models.Model):
                 answer = most_common[0]
         return {'TASK_%s_ANSWER' % (self.task.id): answer}
 
+    def get_absolute_url(self):
+        return reverse('question-detail', args=[self.slug])
+
     @property
     def answer(self):
         answers = self.answer_set.all()
