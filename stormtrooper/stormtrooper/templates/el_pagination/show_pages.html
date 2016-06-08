@@ -1,17 +1,17 @@
 <nav class="pagination">
 {% for page in pages %}
-  {% if forloop.first and not page.is_current %}<a class="button" href="{{ page.path }}"><i class="fa fa-angle-left"></i></a><ul>{% endif %}
+  {% if forloop.first and not page.is_current %}<a class="button" href="{{ page.path }}"><span class="icon"><i class="fa fa-angle-left"></i></span></a><ul>{% endif %}
   {% if forloop.first and page.is_current %}<ul>{% endif %}
 
   {% if not forloop.first and not forloop.last or forloop.first and page.is_current or forloop.last and page.is_current %}
     {% if page == None %}
     <li><span>...</span></li>
     {% else %}
-    <li><a class="button{% if page.is_current %} is-primary{% endif %}" href="{{ page.path }}">{{ page.label }}</a></li>
+    <li><a class="button{% if page.is_current %} is-dark is-disabled{% endif %}" href="{{ page.path }}">{{ page.label }}</a></li>
     {% endif %}
   {% endif %}
 
   {% if forloop.last and page.is_current %}</ul>{% endif %}
-  {% if forloop.last and not page.is_current %}</ul><a class="button" href="{{ page.path }}"><i class="fa fa-angle-right"></i></a>{% endif %}
+  {% if forloop.last and not page.is_current %}</ul><a class="button" href="{{ page.path }}"><span class="icon"><i class="fa fa-angle-right"></i></span></a>{% endif %}
 {% endfor %}
 </nav>
