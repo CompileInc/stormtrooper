@@ -45,11 +45,12 @@
             <form action="{{ question.get_absolute_url }}" method="post">
                 {% csrf_token %}
                 {% if question.task.is_multiple_choice %}
-                <label class="label">
-                    {{ form.answer_choice.label_tag }}
-                </label>
                 <p class="control">
-                   {{ form.answer_choice | addcss:"radio" }}
+                    {% for choice in form.answer_choice %}
+                    <label class="radio">
+                       {{ choice }}
+                    </label>
+                    {% endfor %}
                 </p>
                 {% else %}
                 <label class="label">

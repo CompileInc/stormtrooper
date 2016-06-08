@@ -10,4 +10,4 @@ class ChoiceAnswerForm(forms.Form):
         super(ChoiceAnswerForm, self).__init__(*args, **kwargs)
         if task:
             qs = task.choices
-            self.fields['answer_choice'] = forms.ModelChoiceField(queryset=qs, widget=forms.RadioSelect)
+            self.fields['answer_choice'] = forms.ModelChoiceField(queryset=qs, widget=forms.RadioSelect, empty_label=None)
