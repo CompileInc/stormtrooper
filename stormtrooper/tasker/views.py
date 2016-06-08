@@ -2,6 +2,7 @@ from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import FormMixin, ProcessFormView
 from django.views.generic import View
+from django.views.generic.base import ContextMixin
 from django.http.response import Http404, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.utils.encoding import force_text
@@ -22,9 +23,16 @@ class TaskListView(ListView):
             return self.model.objects.active()
 
 
-class TaskDetailView(DetailView):
+class TaskDetailView(DetailView, ContextMixin):
     model = Task
 
+    def get_context_data(self, **kwargs):
+        context = super(TaskDetailView, self).get_context_data(**kwargs)
+        task_obj = self.get_object()
+        user = self.request.user
+        context.update({'answered': task_obj.answered(user),
+                        'progress': task_obj.progress(user)})
+        return context
 
 class TaskPlayView(View):
 

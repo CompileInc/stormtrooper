@@ -1,4 +1,5 @@
-from __future__ import unicode_literals
+from __future__ import division, unicode_literals
+from math import floor
 
 from django.conf import settings
 from django.core.validators import EMPTY_VALUES
@@ -77,11 +78,17 @@ class Task(models.Model):
     def choices(self):
         return self.choice_set.all()
 
-    @property
-    def answered(self):
+    def answered(self, user=None):
         questions = self.questions
-        answered = Answer.objects.filter(question__in=questions).exclude(answered_by=None).count()
-        return answered
+        base_qs = Answer.objects.filter(question__in=questions)
+        if user:
+            return base_qs.filter(answered_by=user).count()
+        return base_qs.exclude(answered_by=None).count()
+
+    def progress(self, user=None):
+        if user:
+            return floor(self.answered(user=user) / self.no_of_questions * 100)
+        return None
 
     @cached_property
     def is_multiple_choice(self):
@@ -184,9 +191,10 @@ class Answer(models.Model):
         unique_together = ('question', 'answered_by')
 
     def __unicode__(self):
-        if self.answer['choice_id'] not in EMPTY_VALUES:
+        choice_id = self.answer.get("choice_id")
+        if choice_id and choice_id not in EMPTY_VALUES:
             return unicode(Choice.objects.get(task=self.question.task,
-                                              id=int(self.answer['choice_id'])))
+                                              id=int(choice_id)))
 
         return self.answer['verbose']
 
