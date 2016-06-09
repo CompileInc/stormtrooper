@@ -57,6 +57,9 @@ class Task(models.Model):
     def get_absolute_url(self):
         return reverse('task-detail', args=[self.id])
 
+    def get_task_play_url(self):
+        return reverse('task-play', args=[self.id])
+
     @cached_property
     def questions(self):
         return self.question_set.all()

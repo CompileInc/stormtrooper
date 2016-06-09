@@ -53,9 +53,8 @@ class QuestionDetailView(DetailView, FormMixin, ProcessFormView):
     model = Question
 
     def get_success_url(self):
-        # TODO: redirect to next unanswered question
         if self.object:
-            return force_text(self.object.get_absolute_url())
+            return force_text(self.object.task.get_task_play_url())
 
     def get_form(self, form_class=None):
         # TODO: notify if question has already been answered
