@@ -120,7 +120,9 @@ class Task(models.Model):
         '''
         questions = self.questions
         if user:
-            answered_qs = Answer.objects.filter(question__in=questions, answered_by=user).values_list('question__id', flat=True)
+            answered_qs = Answer.objects.filter(question__in=questions,
+                                                answered_by=user)\
+                                        .values_list('question__id', flat=True)
             questions = questions.exclude(id__in=answered_qs)
         return questions.order_by('?').first()
 
@@ -154,42 +156,35 @@ class Question(models.Model):
         return super(Question, self).save(*args, **kwargs)
 
     def compute_answer(self, answers, is_best_of):
-        answer = None
         if self.task.answer_plugin:
             answers = get_plugin(self.task.answer_plugin).process(answers)
 
         if len(answers) < Task.MIN_TO_ANSWER:
             answer = ""
         else:
-            verbose = [a['verbose'] for a in answers]
-            most_common = Counter(verbose).most_common(1)[0]
-            votes = most_common[1]
+            most_common = Counter(answers).most_common(1)
             if is_best_of:
-                cutoff = max(len(verbose) / 2 + 1, Task.MIN_TO_ANSWER)
-                if votes >= cutoff:
-                    popular_answer = most_common[0]
+                cutoff = max(len(answers) / 2 + 1, Task.MIN_TO_ANSWER)
+                if most_common[1] >= cutoff:
+                    answer = most_common[0]
                 else:
-                    popular_answer = ""
+                    answer = ""
             else:
-                popular_answer = most_common[0]
-            if popular_answer:
-                for a in answers:
-                    if popular_answer == a['verbose']:
-                        answer = a
-                        answer.update({'count': votes})
-                        break;
-        return {'computed_answer': answer}
+                answer = most_common[0]
+        return {'ST_TASK_%s_ANSWER' % (self.task.id): answer}
 
     def get_absolute_url(self):
         return reverse('question-detail', args=[self.slug])
 
     @property
     def answer(self):
-        answers = self.answer_set.all()
-        answers = [a.data for a in answers]
-        result = {'answers' : answers}
-        result.update(self.compute_answer(answers, self.task.is_best_of))
-        return result
+        answer_set = self.answer_set.all()
+        answers = {}
+        for a in answer_set:
+            answers.update(a.data)
+        answers.update(self.compute_answer(answers.values(),
+                                           self.task.is_best_of))
+        return answers
 
     def __unicode__(self):
         return str(self.slug)
@@ -199,6 +194,9 @@ class Answer(models.Model):
     question = models.ForeignKey(Question)
     answer = JSONField()
     answered_by = models.ForeignKey(settings.AUTH_USER_MODEL)
+
+    '''Use this field in future to mark if this answer was chosen.'''
+    # is_voted_answer = models.BooleanField(default=False)
 
     class Meta:
         unique_together = ('question', 'answered_by')
@@ -213,6 +211,4 @@ class Answer(models.Model):
 
     @property
     def data(self):
-        data = self.answer
-        data["user"] = self.answered_by.username
-        return data
+        return {"ST_USER_%s_ANSWER" % (self.answered_by.username): str(self)}
