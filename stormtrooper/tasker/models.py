@@ -151,22 +151,31 @@ class Question(models.Model):
         return super(Question, self).save(*args, **kwargs)
 
     def compute_answer(self, answers, is_best_of):
+        answer = None
         if self.task.answer_plugin:
             answers = get_plugin(self.task.answer_plugin).process(answers)
 
         if len(answers) < Task.MIN_TO_ANSWER:
             answer = ""
         else:
-            most_common = Counter(answers).most_common(1)
+            verbose = [a['verbose'] for a in answers]
+            most_common = Counter(verbose).most_common(1)[0]
+            votes = most_common[1]
             if is_best_of:
-                cutoff = max(len(answers) / 2 + 1, Task.MIN_TO_ANSWER)
-                if most_common[1] >= cutoff:
-                    answer = most_common[0]
+                cutoff = max(len(verbose) / 2 + 1, Task.MIN_TO_ANSWER)
+                if votes >= cutoff:
+                    popular_answer = most_common[0]
                 else:
-                    answer = ""
+                    popular_answer = ""
             else:
-                answer = most_common[0]
-        return {'TASK_%s_ANSWER' % (self.task.id): answer}
+                popular_answer = most_common[0]
+            if popular_answer:
+                for a in answers:
+                    if popular_answer == a['verbose']:
+                        answer = a
+                        answer.update({'count': votes})
+                        break;
+        return {'computed_answer': answer}
 
     def get_absolute_url(self):
         return reverse('question-detail', args=[self.slug])
@@ -175,8 +184,9 @@ class Question(models.Model):
     def answer(self):
         answers = self.answer_set.all()
         answers = [a.data for a in answers]
-        answers.insert(0, self.compute_answer(answers, self.task.is_best_of))
-        return answers
+        result = {'answers' : answers}
+        result.update(self.compute_answer(answers, self.task.is_best_of))
+        return result
 
     def __unicode__(self):
         return str(self.slug)
@@ -200,5 +210,6 @@ class Answer(models.Model):
 
     @property
     def data(self):
-        data = self.question.question
-        data["USER_%s_ANSWER" % (self.answered_by.username)] = str(self)
+        data = self.answer
+        data["user"] = self.answered_by.username
+        return data
