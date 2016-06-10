@@ -1,0 +1,1 @@
+{{ username }} Your export is ready and is attached with the mail

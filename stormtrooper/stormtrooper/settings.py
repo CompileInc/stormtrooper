@@ -133,6 +133,10 @@ STATICFILES_FINDERS = STATICFILES_FINDERS + ['djangobower.finders.BowerFinder']
 BOWER_COMPONENTS_ROOT = '%s/components/' % (BASE_DIR)
 BOWER_INSTALLED_APPS = ['bulma#0.0.26']
 
+# email conf
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'notifications@example.com'
+
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "asgi_redis.RedisChannelLayer",
