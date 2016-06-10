@@ -1,9 +1,22 @@
 from django.conf.urls import url
-from tasker.views import TaskListView, TaskDetailView, QuestionDetailView, TaskPlayView, TaskExportView
+from tasker.views import TaskListView, TaskDetailView, QuestionDetailView,\
+                         TaskPlayView, TaskExportView
+from django.contrib.auth.decorators import login_required
 
 
-urlpatterns = (url(r'^$', TaskListView.as_view(), name='task-list'),
-               url(r'^(?P<pk>(\d+))/$', TaskDetailView.as_view(), name='task-detail'),
-               url(r'^(?P<pk>(\d+))/play$', TaskPlayView.as_view(), name='task-play'),
-               url(r'^(?P<pk>(\d+))/export$', TaskExportView.as_view(), name='task-export'),
-               url(r'^questions/(?P<slug>[\w-]+)/$', QuestionDetailView.as_view(), name='question-detail'),)
+urlpatterns = (url(r'^$',
+                   login_required(TaskListView.as_view()),
+                   name='task-list'),
+               url(r'^(?P<pk>(\d+))/$',
+                   login_required(TaskDetailView.as_view()),
+                   name='task-detail'),
+               url(r'^(?P<pk>(\d+))/play$',
+                   login_required(TaskPlayView.as_view()),
+                   name='task-play'),
+               url(r'^(?P<pk>(\d+))/export$',
+                   login_required(TaskExportView.as_view()),
+                   name='task-export'),
+               url(r'^questions/(?P<slug>[\w-]+)/$',
+                   login_required(QuestionDetailView.as_view()),
+                   name='question-detail')
+                   )

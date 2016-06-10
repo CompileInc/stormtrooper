@@ -35,6 +35,7 @@ class TaskDetailView(DetailView, ContextMixin):
                         'progress': task_obj.progress(user)})
         return context
 
+
 class TaskPlayView(View):
 
     def get(self, request, pk):
@@ -44,10 +45,11 @@ class TaskPlayView(View):
                 random_qn = task_obj.random_question(user=request.user)
                 if random_qn:
                     return HttpResponseRedirect(random_qn.get_absolute_url())
-                #TODO show message saying no more unanswered questions
+                # TODO show message saying no more unanswered questions
             return HttpResponseRedirect(reverse('task-list'))
         except Task.DoesNotExist:
             return Http404
+
 
 class TaskExportView(View):
 
@@ -56,11 +58,13 @@ class TaskExportView(View):
             task_obj = Task.objects.get(pk=pk)
             export = task_obj.export()
             # call function to trigger sending export
-            messages.add_message(request, messages.INFO, "Export has been queued {}".format(export.pk))
+            messages.add_message(request, messages.INFO,
+                                 "Export has been queued {}".format(export.pk))
         except Task.DoesNotExist:
             messages.add_message(request, messages.ERROR, "Task does not exist")
         # go to the previous page or to the task detail page
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER', task_obj.get_absolute_url()))
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER',
+                                                     task_obj.get_absolute_url()))
 
 
 class QuestionDetailView(DetailView, FormMixin, ProcessFormView):
@@ -97,5 +101,7 @@ class QuestionDetailView(DetailView, FormMixin, ProcessFormView):
             else:
                 answer = {'verbose': data.get('answer')}
             defaults = {'answer': answer}
-            _ans_obj, _created = Answer.objects.get_or_create(question=self.object, answered_by=user, defaults=defaults)
+            _ans_obj, _created = Answer.objects.get_or_create(question=self.object,
+                                                              answered_by=user,
+                                                              defaults=defaults)
         return super(QuestionDetailView, self).form_valid(form)
