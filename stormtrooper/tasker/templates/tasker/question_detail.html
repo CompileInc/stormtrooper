@@ -42,6 +42,22 @@
             </table>
         </div>
         <div class="box">
+            {% if form.answer.errors %}
+            {% for error in form.answer.errors %}
+            <div class="notification is-danger">
+                <button class="delete"></button>
+                {{ error|escape }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% if form.answer_choice.errors %}
+            {% for error in form.answer_choice.errors %}
+            <div class="notification is-danger">
+                <button class="delete"></button>
+                {{ error|escape }}
+            </div>
+            {% endfor %}
+            {% endif %}
             <form action="{{ question.get_absolute_url }}" method="post">
                 {% csrf_token %}
                 {% if question.task.is_multiple_choice %}
