@@ -233,22 +233,20 @@ class Export(models.Model):
     def __unicode__(self):
         return unicode(self.task)
 
-    @classmethod
-    def export(cls, task, file_handle=None):
+    def export(self, file_handle=None, save=True):
         '''
         exports the task questions and answers as a CSV
         '''
         if not file_handle:
             file_handle = StringIO.StringIO()
-        data = task.answers
+        data = self.task.answers
         headers = data[0].keys()
         writer = csv.DictWriter(file_handle, fieldnames=headers)
         writer.writeheader()
         for row in data:
             writer.writerow(row)
         export_file=ContentFile(file_handle.getvalue())
-        export_inst = cls(task=task)
-        export_filename = "ST_TASK_{task_id}_EXPORT_{date}.csv".format(task_id=task.id,
+        export_filename = "ST_TASK_{task_id}_EXPORT_{date}.csv".format(task_id=self.task.id,
                                                                        date=str(datetime.date.today()))
-        export_inst.export_file.save(name=export_filename, content=export_file, save=True)
-        return export_inst
+        self.export_file.save(name=export_filename, content=export_file, save=save)
+        return self
