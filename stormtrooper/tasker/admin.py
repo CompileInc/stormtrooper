@@ -48,7 +48,6 @@ class TaskAdmin(admin.ModelAdmin):
         for q in queryset:
             message = {'task_id': q.id}
             Channel('tasker-questions-create').send(message)
-        questions = Question.objects.filter(task__in=queryset)
         message = "%s tasks scheduled for processing." % (queryset.count())
         self.message_user(request, message)
 
