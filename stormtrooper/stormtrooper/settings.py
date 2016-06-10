@@ -12,8 +12,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-from django.conf.global_settings import STATICFILES_FINDERS,\
-    AUTHENTICATION_BACKENDS
+from django.conf.global_settings import STATICFILES_FINDERS
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -47,6 +46,7 @@ INSTALLED_APPS = (
     'tasker',
     'djangobower',
     'el_pagination',
+    'channels',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -63,7 +63,7 @@ MIDDLEWARE_CLASSES = (
 AUTHENTICATION_BACKENDS = (
     'social.backends.google.GoogleOAuth2',
     'django.contrib.auth.backends.ModelBackend',
-    )
+)
 
 ROOT_URLCONF = 'stormtrooper.urls'
 
@@ -132,6 +132,16 @@ STATICFILES_FINDERS = STATICFILES_FINDERS + ['djangobower.finders.BowerFinder']
 
 BOWER_COMPONENTS_ROOT = '%s/components/' % (BASE_DIR)
 BOWER_INSTALLED_APPS = ['bulma#0.0.26']
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "asgi_redis.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
+        },
+        "ROUTING": "stormtrooper.routing.channel_routing"
+    }
+}
 
 try:
     from local_settings import *

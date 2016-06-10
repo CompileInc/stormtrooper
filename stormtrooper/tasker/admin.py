@@ -3,6 +3,7 @@ from django.contrib import admin, messages
 from django.db.models.fields import BLANK_CHOICE_DASH
 from tasker.models import Task, Choice, Question, Answer
 from plugins import ALL_PLUGIN_CHOICES
+from channels import Channel
 
 
 class ChoiceAdmin(admin.ModelAdmin):
@@ -45,9 +46,10 @@ class TaskAdmin(admin.ModelAdmin):
 
     def generate_questions(self, request, queryset):
         for q in queryset:
-            q.process()
+            message = {'task_id': q.id}
+            Channel('tasker-questions-create').send(message)
         questions = Question.objects.filter(task__in=queryset)
-        message = "%s tasks processed to %s questions in total." % (queryset.count(), questions.count())
+        message = "%s tasks scheduled for processing." % (queryset.count())
         self.message_user(request, message)
 
     generate_questions.short_description = "Generate questions"
