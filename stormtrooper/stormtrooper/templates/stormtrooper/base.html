@@ -69,7 +69,22 @@
         </div>
       </div>
     </div>
-
+   {% if messages %}
+    <div class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-8 is-offset-2">
+                    {% for message in messages %}
+                    <div class="notification is-primary">
+                        <button class="delete"></button>
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
     {% block content %}{% endblock content %}
 
     <div class="container">

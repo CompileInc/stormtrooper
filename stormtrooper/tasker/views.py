@@ -6,6 +6,7 @@ from django.views.generic.base import ContextMixin
 from django.http.response import Http404, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.utils.encoding import force_text
+from django.contrib import messages
 
 from tasker.models import Task, Question, Answer
 from tasker.forms import TextAnswerForm, ChoiceAnswerForm
@@ -47,6 +48,19 @@ class TaskPlayView(View):
             return HttpResponseRedirect(reverse('task-list'))
         except Task.DoesNotExist:
             return Http404
+
+class TaskExportView(View):
+
+    def get(self, request, pk):
+        try:
+            task_obj = Task.objects.get(pk=pk)
+            export = task_obj.export()
+            # call function to trigger sending export
+            messages.add_message(request, messages.INFO, "Export has been queued {}".format(export.pk))
+        except Task.DoesNotExist:
+            messages.add_message(request, messages.ERROR, "Task does not exist")
+        # go to the previous page or to the task detail page
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER', task_obj.get_absolute_url()))
 
 
 class QuestionDetailView(DetailView, FormMixin, ProcessFormView):
