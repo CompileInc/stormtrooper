@@ -58,6 +58,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
 )
 
 AUTHENTICATION_BACKENDS = (
@@ -121,7 +122,8 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = 'my-google-key'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'my-google-secret'
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/tasks'
 SOCIAL_AUTH_USER_MODEL = AUTH_USER_MODEL
-SOCIAL_AUTH_LOGIN_URL = 'accounts/login/'
+SOCIAL_AUTH_LOGIN_URL = '/accounts/login/'
+LOGIN_ERROR_URL = '/accounts/login/'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
@@ -132,6 +134,10 @@ STATICFILES_FINDERS = STATICFILES_FINDERS + ['djangobower.finders.BowerFinder']
 
 BOWER_COMPONENTS_ROOT = '%s/components/' % (BASE_DIR)
 BOWER_INSTALLED_APPS = ['bulma#0.0.26']
+
+# email conf
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'notifications@example.com'
 
 CHANNEL_LAYERS = {
     "default": {

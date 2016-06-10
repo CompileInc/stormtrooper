@@ -1,7 +1,7 @@
 from django import forms
 
 class TextAnswerForm(forms.Form):
-    answer = forms.CharField(widget=forms.Textarea)
+    answer = forms.CharField(widget=forms.TextInput)
 
 class ChoiceAnswerForm(forms.Form):
     answer_choice = forms.ModelChoiceField(queryset=None)

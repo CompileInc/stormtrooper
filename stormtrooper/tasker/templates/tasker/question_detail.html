@@ -42,27 +42,56 @@
             </table>
         </div>
         <div class="box">
+            {% if form.answer.errors %}
+            {% for error in form.answer.errors %}
+            <div class="notification is-danger">
+                <button class="delete"></button>
+                {{ error|escape }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% if form.answer_choice.errors %}
+            {% for error in form.answer_choice.errors %}
+            <div class="notification is-danger">
+                <button class="delete"></button>
+                {{ error|escape }}
+            </div>
+            {% endfor %}
+            {% endif %}
             <form action="{{ question.get_absolute_url }}" method="post">
                 {% csrf_token %}
                 {% if question.task.is_multiple_choice %}
                 <p class="control">
-                    {% for choice in form.answer_choice %}
+                    <ul>
+                        {% for choice in form.answer_choice %}
+                    <li>
                     <label class="radio">
                        {{ choice }}
                     </label>
+                    </li>
                     {% endfor %}
+                    </ul>
                 </p>
-                {% else %}
-                <label class="label">
-                    {{ form.answer.label_tag }}
-                </label>
-                <p class="control">
-                    {{ form.answer | addcss:"textarea" }}
-                </p>
-                {% endif %}
-                <p class="control">
+                <div class="control">
                     <button class="button is-primary">Submit</button>
-                </p>
+                </div>
+                {% else %}
+                <div class="control is-horizontal">
+                    <div class="control-label">
+                        <label class="label">
+                            {{ form.answer.label_tag }}
+                        </label>
+                    </div>
+                    <div class="control is-grouped">
+                        <div class="control is-expanded">
+                            {{ form.answer | addcss:"input" }}
+                        </div>
+                        <div class="control">
+                            <button class="button is-primary">Submit</button>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
             </form>
         </div>
       </div>

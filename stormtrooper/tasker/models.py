@@ -121,25 +121,6 @@ class Task(models.Model):
 
             self.save()
 
-    def export(self, file_handle=None):
-        '''
-        exports the task questions and answers as a CSV
-        '''
-        if not file_handle:
-            file_handle = StringIO.StringIO()
-        data = self.answers
-        headers = data[0].keys()
-        writer = csv.DictWriter(file_handle, fieldnames=headers)
-        writer.writeheader()
-        for row in data:
-            writer.writerow(row)
-        export_file=ContentFile(file_handle.getvalue())
-        export = Export(task=self)
-        export_filename = "ST_TASK_{task_id}_EXPORT_{date}.csv".format(task_id=self.id,
-                                                                       date=str(datetime.date.today()))
-        export.export_file.save(name=export_filename, content=export_file, save=True)
-        return export
-
     def random_question(self, user=None):
         '''
         Responds with a random un-answered question for that user
@@ -251,3 +232,20 @@ class Export(models.Model):
 
     def __unicode__(self):
         return unicode(self.task)
+
+    def export(self, file_handle=None, save=True):
+        '''
+        exports the task questions and answers as a CSV
+        '''
+        if not file_handle:
+            file_handle = StringIO.StringIO()
+        data = self.task.answers
+        headers = data[0].keys()
+        writer = csv.DictWriter(file_handle, fieldnames=headers)
+        writer.writeheader()
+        for row in data:
+            writer.writerow(row)
+        export_file=ContentFile(file_handle.getvalue())
+        export_filename = "ST_TASK_{task_id}_EXPORT_{date}.csv".format(task_id=self.task.id,
+                                                                       date=str(datetime.date.today()))
+        self.export_file.save(name=export_filename, content=export_file, save=save)
