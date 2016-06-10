@@ -11,7 +11,8 @@ def tasker_export_create(message):
     user_model = get_user_model()
     user = user_model.objects.get(id=message['user_id'])
     to_addr = [user.email]
-    export = Export(task=task).export()
+    export = Export(task=task)
+    export.export()
     attachment = export.export_file.file.name
     data_dict = {'username': user.username,
                  'email': user.email}

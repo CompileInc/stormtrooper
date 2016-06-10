@@ -249,4 +249,3 @@ class Export(models.Model):
         export_filename = "ST_TASK_{task_id}_EXPORT_{date}.csv".format(task_id=self.task.id,
                                                                        date=str(datetime.date.today()))
         self.export_file.save(name=export_filename, content=export_file, save=save)
-        return self
