@@ -225,6 +225,7 @@ class Answer(models.Model):
     def data(self):
         return {"ST_USER_%s_ANSWER" % (self.answered_by.username): str(self)}
 
+
 class Export(models.Model):
     export_file = models.FileField(upload_to='exports/%Y/%m/%d/')
     task = models.ForeignKey(Task)
@@ -245,7 +246,7 @@ class Export(models.Model):
         writer.writeheader()
         for row in data:
             writer.writerow(row)
-        export_file=ContentFile(file_handle.getvalue())
+        export_file = ContentFile(file_handle.getvalue())
         export_filename = "ST_TASK_{task_id}_EXPORT_{date}.csv".format(task_id=self.task.id,
                                                                        date=str(datetime.date.today()))
         self.export_file.save(name=export_filename, content=export_file, save=save)
