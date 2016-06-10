@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from .models import Task
+from .models import Task, Export
 from .utils import send_email_with_attachment
 def tasker_questions_create(message):
     task = Task.objects.get(id=message['task_id'])
@@ -10,7 +10,7 @@ def tasker_export_create(message):
     user_model = get_user_model()
     user = user_model.objects.get(id=message['user_id'])
     to_addr = [user.email]
-    export = task.export()
+    export = Export.export(task=task)
     attachment = export.export_file.file.name
     data_dict = {'username': user.username,
                  'email': user.email}
