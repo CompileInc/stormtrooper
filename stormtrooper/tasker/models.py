@@ -227,26 +227,41 @@ class Answer(models.Model):
 
 
 class Export(models.Model):
-    export_file = models.FileField(upload_to='exports/%Y/%m/%d/')
+    PROCESSING = 'PS'
+    FAILURE = 'FR'
+    SUCCESS = 'SS'
+    STATUS_CHOICES = ((PROCESSING, "Processing"), (FAILURE, "Failure"), (SUCCESS, "Success"))
+
     task = models.ForeignKey(Task)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    export_file = models.FileField(upload_to='exports/%Y/%m/%d/', blank=True, null=True)
+    status = models.CharField(max_length=2, choices=STATUS_CHOICES, default=PROCESSING)
     created_on = models.DateField(auto_now_add=True)
 
     def __unicode__(self):
         return unicode(self.task)
 
-    def export(self, file_handle=None, save=True):
+    def export(self, file_handle=None):
         '''
         exports the task questions and answers as a CSV
         '''
-        if not file_handle:
-            file_handle = StringIO.StringIO()
-        data = self.task.answers
-        headers = data[0].keys()
-        writer = csv.DictWriter(file_handle, fieldnames=headers)
-        writer.writeheader()
-        for row in data:
-            writer.writerow(row)
-        export_file = ContentFile(file_handle.getvalue())
-        export_filename = "ST_TASK_{task_id}_EXPORT_{date}.csv".format(task_id=self.task.id,
-                                                                       date=str(datetime.date.today()))
-        self.export_file.save(name=export_filename, content=export_file, save=save)
+        try:
+            if not file_handle:
+                file_handle = StringIO.StringIO()
+            data = self.task.answers
+            # http://stackoverflow.com/a/11399424
+            # getting the union of all keys in all of the answer rows
+            headers = list(set().union(*(i.keys() for i in data)))
+            writer = csv.DictWriter(file_handle, fieldnames=headers)
+            writer.writeheader()
+            for row in data:
+                writer.writerow(row)
+            export_file = ContentFile(file_handle.getvalue())
+            export_filename = "ST_TASK_{task_id}_EXPORT_{date}.csv".format(task_id=self.task.id,
+                                                                           date=str(datetime.date.today()))
+            self.export_file.save(name=export_filename, content=export_file, save=False)
+            self.status = self.SUCCESS
+        except Exception as e:
+            print e
+            self.status = self.FAILURE
+        self.save()
