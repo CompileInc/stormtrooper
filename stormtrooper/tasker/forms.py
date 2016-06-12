@@ -1,7 +1,10 @@
 from django import forms
+from tasker.models import Export
+
 
 class TextAnswerForm(forms.Form):
     answer = forms.CharField(widget=forms.TextInput)
+
 
 class ChoiceAnswerForm(forms.Form):
     answer_choice = forms.ModelChoiceField(queryset=None)
@@ -11,3 +14,10 @@ class ChoiceAnswerForm(forms.Form):
         if task:
             qs = task.choices
             self.fields['answer_choice'] = forms.ModelChoiceField(queryset=qs, widget=forms.RadioSelect, empty_label=None)
+
+
+class ExportForm(forms.ModelForm):
+    class Meta:
+        model = Export
+        fields = ['task']
+        widgets = {'task': forms.HiddenInput()}

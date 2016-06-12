@@ -1,6 +1,6 @@
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import FormMixin, ProcessFormView
+from django.views.generic.edit import FormMixin, ProcessFormView, CreateView
 from django.views.generic import View
 from django.views.generic.base import ContextMixin
 from django.http.response import Http404, HttpResponseRedirect
@@ -9,8 +9,13 @@ from django.utils.encoding import force_text
 from django.contrib import messages
 from channels import Channel
 
-from tasker.models import Task, Question, Answer
-from tasker.forms import TextAnswerForm, ChoiceAnswerForm
+from tasker.models import Task, Question, Answer, Export
+from tasker.forms import TextAnswerForm, ChoiceAnswerForm, ExportForm
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+import logging
+
+LOG = logging.getLogger(__name__)
 
 
 class TaskListView(ListView):
@@ -31,8 +36,10 @@ class TaskDetailView(DetailView, ContextMixin):
     def get_context_data(self, **kwargs):
         context = super(TaskDetailView, self).get_context_data(**kwargs)
         task_obj = self.get_object()
+        export_form = ExportForm(initial={'task': task_obj})
         user = self.request.user
-        context.update({'answered': task_obj.answered(user),
+        context.update({'export_form': export_form,
+                        'answered': task_obj.answered(user),
                         'progress': task_obj.progress(user)})
         return context
 
@@ -46,26 +53,28 @@ class TaskPlayView(View):
                 random_qn = task_obj.random_question(user=request.user)
                 if random_qn:
                     return HttpResponseRedirect(random_qn.get_absolute_url())
-                # TODO show message saying no more unanswered questions
+                messages.add_message(self.request, messages.ERROR, "There are no more unanswered questions")
             return HttpResponseRedirect(reverse('task-list'))
         except Task.DoesNotExist:
             return Http404
 
 
-class TaskExportView(View):
+@method_decorator(csrf_exempt, 'dispatch')
+class TaskExportView(CreateView):
+    model = Export
+    form_class = ExportForm
 
-    def get(self, request, pk):
-        try:
-            task_obj = Task.objects.get(pk=pk)
-            channel_message = {'task_id': task_obj.pk,
-                               'user_id': request.user.pk}
-            Channel('tasker-export-create').send(channel_message)
-            messages.add_message(request, messages.INFO, "Your export has been queued")
-        except Task.DoesNotExist:
-            messages.add_message(request, messages.ERROR, "Task does not exist")
-        # go to the previous page or to the task detail page
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER',
-                                                     task_obj.get_absolute_url()))
+    def get_success_url(self):
+        if self.object:
+            message = {'export_id': self.object.pk}
+            Channel('tasker-export-create').send(message)
+            messages.add_message(self.request, messages.INFO, "Your export has been queued")
+            LOG.info("Export queued")
+        return force_text(self.object.task.get_absolute_url())
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super(TaskExportView, self).form_valid(form)
 
 
 class QuestionDetailView(DetailView, FormMixin, ProcessFormView):

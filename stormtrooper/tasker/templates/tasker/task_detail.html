@@ -47,9 +47,12 @@
           </div>
           {% endif %}
           <div class="level-item has-text-centered">
-            <p class="title">
-              <a href="{{ task.get_task_export_url }}" class="button is-danger is-outlined is-medium" title="Export"><i class="fa fa-download"></i></a>
-            </p>
+              <p class="title">
+                  <form action ="{% url 'task-export' %}" method="post">
+                      {{ export_form }}
+                      <button class="button is-danger is-outlined is-medium" title="Export"><i class="fa fa-download"></i></button>
+                  </form>
+              </p>
           </div>
         </nav>
         <progress class="progress is-success" value="{{ progress }}" max="100">{{ progress }}%</progress>

@@ -2,6 +2,9 @@
 from .models import Task, Export
 from .utils import send_email_with_attachment
 from channels import Channel
+import logging
+
+LOG = logging.getLogger(__name__)
 
 
 def tasker_questions_create(message):
@@ -23,7 +26,9 @@ def tasker_export_send(message):
                      'subject_template': subject_template,
                      'email_template': email_template}
         _result = send_email_with_attachment(to_addr, attachment, **mail_dict)
-    # else log the result
+        LOG.info("sent mail")
+    else:
+        LOG.eror("Could not create CSV for export-id {}".format(export.pk))
 
 
 def tasker_export_create(message):
