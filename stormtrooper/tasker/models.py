@@ -74,6 +74,15 @@ class Task(models.Model):
     def questions(self):
         return self.question_set.all()
 
+    @property
+    def exports(self):
+        return self.export_set.all()
+
+    @property
+    def has_exports(self):
+        exports = self.exports
+        return exports.exists()
+
     @cached_property
     def no_of_questions(self):
         return self.questions.count()

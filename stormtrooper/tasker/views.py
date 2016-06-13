@@ -108,6 +108,11 @@ class QuestionDetailView(DetailView, FormMixin, ProcessFormView):
         else:
             return form_class(**kwargs)
 
+    def get_context_data(self, **kwargs):
+        context = super(QuestionDetailView, self).get_context_data(**kwargs)
+        context['task'] = self.object.task
+        return context
+
     def form_valid(self, form):
         if self.object:
             data = form.cleaned_data
