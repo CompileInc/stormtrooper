@@ -28,6 +28,13 @@
                 </p>
             </div>
             {% endif %}
+            {% if task.has_exports %}
+            <div class="level-item has-text-centered">
+                <p class="title">
+                    <a href="{% url 'export-list' task.id %}" class="button is-danger is-outlined is-medium" title="Past exports"><i class="fa fa-cloud-download"></i></a>
+                </p>
+            </div>
+            {% endif %}
             <div class="level-item has-text-centered">
                 <p class="title">
                     <form action ="{% url 'task-export' %}" method="post">
