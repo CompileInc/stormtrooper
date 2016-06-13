@@ -1,5 +1,18 @@
 {% extends "stormtrooper/base.html" %}
-
+{% load humanize el_pagination_tags %}
 {% block content %}
-{{ form.as_p }}
+{% if form.errors %}
+{% for error in form.task.errors %}
+<div class="section">
+    <div class="columns">
+        <div class="column is-8 is-offset-2">
+            <div class="notification is-danger">
+                <button class="delete"></button>
+                {{ error|escape }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endif %}
 {% endblock content %}
