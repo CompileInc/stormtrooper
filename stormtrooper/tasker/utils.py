@@ -2,6 +2,8 @@ from django.utils.safestring import mark_safe
 from django.utils.text import normalize_newlines
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
+import urllib
+
 
 def remove_newlines(text):
     """
@@ -11,6 +13,7 @@ def remove_newlines(text):
     normalized_text = normalize_newlines(text)
     # Then simply remove the newlines like so.
     return mark_safe(normalized_text.replace('\n', ' '))
+
 
 def send_email_with_attachment(to_addr, attachment, **kwargs):
     data_dict = kwargs['data_dict']
@@ -25,3 +28,7 @@ def send_email_with_attachment(to_addr, attachment, **kwargs):
                          )
     email.attach_file(attachment)
     email.send(fail_silently=True)
+
+
+def url_with_params(url, **kwargs):
+    return "{}?{}".format(url, urllib.urlencode(kwargs))

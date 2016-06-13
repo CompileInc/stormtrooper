@@ -1,18 +1,14 @@
 {% extends "stormtrooper/base.html" %}
 {% load humanize el_pagination_tags %}
 {% block content %}
-{% if form.errors %}
-{% for error in form.task.errors %}
 <div class="section">
     <div class="columns">
         <div class="column is-8 is-offset-2">
-            <div class="notification is-danger">
-                <button class="delete"></button>
-                {{ error|escape }}
-            </div>
+            <form action ="{% url 'task-export' %}" method="post" class="control">
+                {% csrf_token %}{{ form }}
+                <button class="button is-primary" title="Export">Submit</button>
+            </form>
         </div>
     </div>
 </div>
-{% endfor %}
-{% endif %}
 {% endblock content %}

@@ -47,7 +47,8 @@ class TaskPlayView(View):
         try:
             task_obj = Task.objects.get(pk=pk)
             if not task_obj.is_closed:
-                random_qn = task_obj.random_question(user=request.user)
+                exclude = request.GET.get('exclude')
+                random_qn = task_obj.random_question(user=request.user, exclude=exclude)
                 if random_qn:
                     return HttpResponseRedirect(random_qn.get_absolute_url())
                 messages.add_message(self.request, messages.ERROR, "There are no more unanswered questions")
@@ -85,6 +86,12 @@ class TaskExportView(CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super(TaskExportView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        if form.errors and form.errors.get('task'):
+            for form_error in form.errors['task']:
+                messages.add_message(self.request, level=messages.ERROR, message=form_error)
+        return HttpResponseRedirect(form.task.get_absolute_url())
 
 
 class QuestionDetailView(DetailView, FormMixin, ProcessFormView):

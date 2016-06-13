@@ -27,8 +27,8 @@ class ExportForm(forms.ModelForm):
         widgets = {'task': forms.HiddenInput()}
 
     def clean_task(self):
-        task = self.cleaned_data['task']
-        if not Answer.objects.filter(question__task=task).exists():
+        self.task = self.cleaned_data['task']
+        if not Answer.objects.filter(question__task=self.task).exists():
             raise ValidationError(_("Task does not have any answers to export"),
                                   code='invalid')
-        return task
+        return self.task

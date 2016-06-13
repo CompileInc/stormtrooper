@@ -19,6 +19,7 @@ from collections import Counter
 from channels import Channel
 from .plugins import initialize_plugins, get_plugin
 import datetime
+from .utils import url_with_params
 
 initialize_plugins()
 
@@ -64,8 +65,11 @@ class Task(models.Model):
     def get_absolute_url(self):
         return reverse('task-detail', args=[self.id])
 
-    def get_task_play_url(self):
-        return reverse('task-play', args=[self.id])
+    def get_task_play_url(self, exclude=None):
+        url = reverse('task-play', args=[self.id])
+        if exclude:
+            return url_with_params(url, exclude=exclude)
+        return url
 
     def get_task_export_url(self):
         return reverse('task-export', args=[self.id])
@@ -132,7 +136,7 @@ class Task(models.Model):
 
             self.save()
 
-    def random_question(self, user=None):
+    def random_question(self, user=None, exclude=None):
         '''
         Responds with a random un-answered question for that user
         if user is None, returns a random question.
@@ -142,6 +146,9 @@ class Task(models.Model):
             answered_qs = Answer.objects.filter(question__in=questions,
                                                 answered_by=user)\
                                         .values_list('question__id', flat=True)
+            answered_qs = list(answered_qs)
+            if exclude:
+                answered_qs.append(exclude)
             questions = questions.exclude(id__in=answered_qs)
         return questions.order_by('?').first()
 
