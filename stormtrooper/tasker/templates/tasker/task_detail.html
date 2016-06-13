@@ -28,10 +28,11 @@
                 </p>
             </div>
             {% endif %}
+            {% if request.user.is_staff or request.user == task.created_by %}
             {% if task.has_exports %}
             <div class="level-item has-text-centered">
                 <p class="title">
-                    <a href="{% url 'export-list' task.id %}" class="button is-danger is-outlined is-medium" title="Past exports"><i class="fa fa-cloud-download"></i></a>
+                    <a href="{% url 'export-list' task.id %}" class="button is-danger is-outlined is-medium" title="Past exports"><i class="fa fa-download"></i></a>
                 </p>
             </div>
             {% endif %}
@@ -40,10 +41,11 @@
                     <form action ="{% url 'task-export' %}" method="post">
                         {% csrf_token %}
                         {{ export_form }}
-                        <button class="button is-danger is-outlined is-medium" title="Export"><i class="fa fa-download"></i></button>
+                        <button class="button is-primary is-outlined is-medium" title="Export"><i class="fa fa-plus"></i></button>
                     </form>
                 </p>
             </div>
+            {% endif %}
         </nav>
         <progress class="progress is-success" value="{{ progress }}" max="100">{{ progress }}%</progress>
     </div>

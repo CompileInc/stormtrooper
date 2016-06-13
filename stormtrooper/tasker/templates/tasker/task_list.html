@@ -32,7 +32,7 @@
                   <a href="{{ task.get_absolute_url }}" class="button is-info" title="Details"><i class="fa fa-ellipsis-h"></i></a>
                   <a href="{% url 'task-play' task.id %}" class="button is-success" title="Start"><i class="fa fa-play-circle"></i></a>
                   {% if task.has_exports %}
-                  <a href="{% url 'export-list' task.id %}" class="button is-danger" title="past exports"><i class="fa fa-cloud-download"></i></a>
+                  <a href="{% url 'export-list' task.id %}" class="button is-danger" title="past exports"><i class="fa fa-download"></i></a>
                   {% endif %}
                 </td>
               </tr>
