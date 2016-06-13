@@ -7,6 +7,8 @@ from django.core.files.base import ContentFile
 from django.conf import settings
 from django.core.validators import EMPTY_VALUES
 from django.db import models, transaction
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 from jsonfield.fields import JSONField
 from django.utils.functional import cached_property
@@ -14,7 +16,7 @@ import unicodecsv
 from django.core.urlresolvers import reverse
 import hashlib
 from collections import Counter
-
+from channels import Channel
 from .plugins import initialize_plugins, get_plugin
 import datetime
 
@@ -265,3 +267,10 @@ class Export(models.Model):
             print e
             self.status = self.FAILURE
         self.save()
+
+
+@receiver(post_save, sender=Export)
+def export_post_save(sender, instance, created=False, *args, **kwargs):
+    if instance.status == Export.PROCESSING:
+        message = {'export_id': instance.pk}
+        Channel('tasker-export-create').send(message)

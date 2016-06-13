@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from tasker.views import TaskListView, TaskDetailView, QuestionDetailView,\
-                         TaskPlayView, TaskExportView
+                         TaskPlayView, TaskExportView, ExportListView
 from django.contrib.auth.decorators import login_required
 
 
@@ -16,7 +16,9 @@ urlpatterns = (url(r'^$',
                url(r'^export/$',
                    login_required(TaskExportView.as_view()),
                    name='task-export'),
+               url(r'^(?P<pk>(\d+))/export/$',
+                   login_required(ExportListView.as_view()),
+                   name='export-list'),
                url(r'^questions/(?P<slug>[\w-]+)/$',
                    login_required(QuestionDetailView.as_view()),
-                   name='question-detail')
-                   )
+                   name='question-detail'))

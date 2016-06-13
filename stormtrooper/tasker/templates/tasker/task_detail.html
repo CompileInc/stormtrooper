@@ -49,6 +49,7 @@
           <div class="level-item has-text-centered">
               <p class="title">
                   <form action ="{% url 'task-export' %}" method="post">
+                      {% csrf_token %}
                       {{ export_form }}
                       <button class="button is-danger is-outlined is-medium" title="Export"><i class="fa fa-download"></i></button>
                   </form>

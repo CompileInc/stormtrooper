@@ -1,5 +1,5 @@
 from django.views.generic.list import ListView
-from django.views.generic.detail import DetailView
+from django.views.generic.detail import DetailView, SingleObjectMixin
 from django.views.generic.edit import FormMixin, ProcessFormView, CreateView
 from django.views.generic import View
 from django.views.generic.base import ContextMixin
@@ -11,8 +11,6 @@ from channels import Channel
 
 from tasker.models import Task, Question, Answer, Export
 from tasker.forms import TextAnswerForm, ChoiceAnswerForm, ExportForm
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
 import logging
 
 LOG = logging.getLogger(__name__)
@@ -59,15 +57,28 @@ class TaskPlayView(View):
             return Http404
 
 
-@method_decorator(csrf_exempt, 'dispatch')
+class ExportListView(ListView, SingleObjectMixin):
+    template = 'tasker/export_list.html'
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object(queryset=Task.objects.all())
+        return super(ExportListView, self).get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(ExportListView, self).get_context_data(**kwargs)
+        context['task'] = self.object
+        return context
+
+    def get_queryset(self):
+        return self.object.export_set.all()
+
+
 class TaskExportView(CreateView):
     model = Export
     form_class = ExportForm
 
     def get_success_url(self):
         if self.object:
-            message = {'export_id': self.object.pk}
-            Channel('tasker-export-create').send(message)
             messages.add_message(self.request, messages.INFO, "Your export has been queued")
             LOG.info("Export queued")
         return force_text(self.object.task.get_absolute_url())
