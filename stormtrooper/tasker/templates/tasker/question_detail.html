@@ -42,7 +42,7 @@
             {% endif %}
             <form action="{{ question.get_absolute_url }}" method="post">
                 {% csrf_token %}
-                {% if question.task.is_multiple_choice %}
+                {% if task.is_multiple_choice %}
                 <p class="control">
                     <ul>
                         {% for choice in form.answer_choice %}
@@ -62,9 +62,16 @@
                     {{ form.answer | addcss:"input" }}
                 </p>
                 {% endif %}
-                <p class="control">
-                    <button class="button is-primary">Submit</button>
-                </p>
+                <div class="control is-horizontal">
+                    <div class="control is-grouped">
+                        <p class="control">
+                            <button class="button is-primary">Submit</button>
+                        </p>
+                        <p class="control">
+                            <a class="button is-danger" href="{{ task.get_task_play_url }}">Skip</a>
+                        </p>
+                    </div>
+                </div>
             </form>
         </div>
       </div>

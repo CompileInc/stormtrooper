@@ -24,7 +24,7 @@
             {% if not task.is_closed and task.is_active %}
             <div class="level-item has-text-centered">
                 <p class="title">
-                    <a href="{% url 'task-play' task.id %}" class="button is-success is-outlined is-medium" title="Start"><i class="fa fa-play-circle"></i></a>
+                    <a href="{{ task.get_task_play_url }}" class="button is-success is-outlined is-medium" title="Start"><i class="fa fa-play-circle"></i></a>
                 </p>
             </div>
             {% endif %}
