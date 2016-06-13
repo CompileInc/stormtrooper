@@ -24,25 +24,24 @@
             {% if not task.is_closed and task.is_active %}
             <div class="level-item has-text-centered">
                 <p class="title">
-                    <a href="{{ task.get_task_play_url }}" class="button is-success is-outlined is-medium" title="Start"><i class="fa fa-play-circle"></i></a>
-                </p>
-            </div>
-            {% endif %}
-            {% if request.user.is_staff or request.user == task.created_by %}
-            {% if task.has_exports %}
-            <div class="level-item has-text-centered">
-                <p class="title">
-                    <a href="{% url 'export-list' task.id %}" class="button is-danger is-outlined is-medium" title="Past exports"><i class="fa fa-download"></i></a>
-                </p>
-            </div>
-            {% endif %}
-            <div class="level-item has-text-centered">
-                <p class="title">
-                    <form action ="{% url 'task-export' %}" method="post">
-                        {% csrf_token %}
-                        {{ export_form }}
+                  {% if request.user.is_staff or request.user == task.created_by %}
+                  <div class="control is-grouped">
+                    <p class="control">
+                      <a href="{{ task.get_task_play_url }}" class="button is-success is-outlined is-medium" title="Start"><i class="fa fa-play-circle"></i></a>
+                    </p>
+                    {% if task.has_exports %}
+                    <p class="control">
+                      <a href="{% url 'export-list' task.id %}" class="button is-danger is-outlined is-medium" title="Past exports"><i class="fa fa-download"></i></a>
+                    </p>
+                    {% endif %}
+                    <form action ="{% url 'task-export' %}" method="post" class="control">
+                        {% csrf_token %}{{ export_form }}
                         <button class="button is-primary is-outlined is-medium" title="Export"><i class="fa fa-plus"></i></button>
                     </form>
+                  </div>
+                  {% else %}
+                  <a href="{{ task.get_task_play_url }}" class="button is-success is-outlined is-medium" title="Start"><i class="fa fa-play-circle"></i></a>
+                  {% endif %}
                 </p>
             </div>
             {% endif %}

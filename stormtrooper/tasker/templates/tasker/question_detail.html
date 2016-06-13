@@ -56,9 +56,7 @@
                 </p>
                 {% else %}
                 <p class="control">
-                    <label class="label">
-                        {{ form.answer.label_tag }}
-                    </label>
+                    <label class="label">{{ form.answer.label_tag }}</label>
                     {{ form.answer | addcss:"input" }}
                 </p>
                 {% endif %}
