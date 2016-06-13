@@ -7,7 +7,6 @@ from django.http.response import Http404, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.utils.encoding import force_text
 from django.contrib import messages
-from channels import Channel
 
 from tasker.models import Task, Question, Answer, Export
 from tasker.forms import TextAnswerForm, ChoiceAnswerForm, ExportForm
@@ -81,7 +80,7 @@ class TaskExportView(CreateView):
         if self.object:
             messages.add_message(self.request, messages.INFO, "Your export has been queued")
             LOG.info("Export queued")
-        return force_text(self.object.task.get_absolute_url())
+        return self.object.task.get_absolute_url()
 
     def form_valid(self, form):
         form.instance.user = self.request.user
