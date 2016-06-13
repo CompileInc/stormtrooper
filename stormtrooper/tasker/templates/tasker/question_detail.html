@@ -54,26 +54,17 @@
                     {% endfor %}
                     </ul>
                 </p>
-                <div class="control">
-                    <button class="button is-primary">Submit</button>
-                </div>
                 {% else %}
-                <div class="control is-horizontal">
-                    <div class="control-label">
-                        <label class="label">
-                            {{ form.answer.label_tag }}
-                        </label>
-                    </div>
-                    <div class="control is-grouped">
-                        <div class="control is-expanded">
-                            {{ form.answer | addcss:"input" }}
-                        </div>
-                        <div class="control">
-                            <button class="button is-primary">Submit</button>
-                        </div>
-                    </div>
-                </div>
+                <p class="control">
+                    <label class="label">
+                        {{ form.answer.label_tag }}
+                    </label>
+                    {{ form.answer | addcss:"input" }}
+                </p>
                 {% endif %}
+                <p class="control">
+                    <button class="button is-primary">Submit</button>
+                </p>
             </form>
         </div>
       </div>
