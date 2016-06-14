@@ -24,50 +24,44 @@
             </table>
         </div>
         <div class="box">
-            {% if form.answer_choice.errors %}
-            {% for error in form.answer_choice.errors %}
-            <div class="notification is-danger">
-                <button class="delete"></button>
-                {{ error|escape }}
-            </div>
-            {% endfor %}
-            {% endif %}
             <form action="{{ question.get_absolute_url }}" method="post">
-                {% csrf_token %}
+              {% csrf_token %}
+              <label class="label">{{ form.answer.label_tag }}</label>
+              <p class="control{% if form.answer.errors %} has-icon has-icon-right{% endif %}">
                 {% if task.is_multiple_choice %}
-                <p class="control">
-                    <ul>
-                    {% for choice in form.answer_choice %}
-                    <li>
-                    <label class="radio">
-                       {{ choice }}
-                    </label>
-                    </li>
-                    {% endfor %}
-                    </ul>
-                </p>
-                {% else %}
-                <label class="label">{{ form.answer.label_tag }}</label>
-                <p class="control{% if form.answer.errors %} has-icon has-icon-right{% endif %}">
-                    {% if form.answer.errors %}
-                    {{ form.answer|addcss:"input is-danger" }}
-                    <i class="fa fa-warning"></i>
-                    {% for error in form.answer.errors %}<span class="help is-danger">{{ error|escape }}</span>{% endfor %}
-                    {% else %}
-                    {{ form.answer|addcss:"input" }}
-                    {% endif %}
-                </p>
+                {% if form.answer.errors %}
+                <i class="fa fa-warning"></i>
+                {% for error in form.answer.errors %}<span class="help is-danger">{{ error|escape }}</span>{% endfor %}
                 {% endif %}
-                <div class="control is-horizontal">
-                    <div class="control is-grouped">
-                        <p class="control">
-                            <button class="button is-primary">Submit</button>
-                        </p>
-                        <p class="control">
-                            <a class="button is-light" href="{% url 'task-play' task.id %}?exclude={{ question.id }}">Skip</a>
-                        </p>
-                    </div>
+                <ul>
+                  {% for choice in form.answer %}
+                  <li>
+                    <label class="radio">
+                      {{ choice }}
+                    </label>
+                  </li>
+                  {% endfor %}
+                </ul>
+                {% else %}
+                {% if form.answer.errors %}
+                {{ form.answer|addcss:"input is-danger" }}
+                <i class="fa fa-warning"></i>
+                {% for error in form.answer.errors %}<span class="help is-danger">{{ error|escape }}</span>{% endfor %}
+                {% else %}
+                {{ form.answer|addcss:"input" }}
+                {% endif %}
+              </p>
+              {% endif %}
+              <div class="control is-horizontal">
+                <div class="control is-grouped">
+                  <p class="control">
+                    <button class="button is-primary">Submit</button>
+                  </p>
+                  <p class="control">
+                    <a class="button is-light" href="{% url 'task-play' task.id %}?exclude={{ question.id }}">Skip</a>
+                  </p>
                 </div>
+              </div>
             </form>
         </div>
       </div>

@@ -52,7 +52,7 @@ class TaskPlayView(View):
                 if random_qn:
                     return HttpResponseRedirect(random_qn.get_absolute_url())
                 messages.add_message(self.request, messages.ERROR, "There are no more unanswered questions")
-            return HttpResponseRedirect(reverse('task-list'))
+            return HttpResponseRedirect(task_obj.get_absolute_url())
         except Task.DoesNotExist:
             return Http404
 
@@ -125,7 +125,7 @@ class QuestionDetailView(DetailView, FormMixin, ProcessFormView):
             user = self.request.user
             task = self.object.task
             if task.is_multiple_choice:
-                choice_obj = data.get('answer_choice')
+                choice_obj = data.get('answer')
                 choice_id = choice_obj.pk
                 choice_verbose = choice_obj.name
                 answer = {'choice_id': choice_id,

@@ -9,15 +9,15 @@ class TextAnswerForm(forms.Form):
 
 
 class ChoiceAnswerForm(forms.Form):
-    answer_choice = forms.ModelChoiceField(queryset=None)
+    answer = forms.ModelChoiceField(queryset=None)
 
     def __init__(self, task, *args, **kwargs):
         super(ChoiceAnswerForm, self).__init__(*args, **kwargs)
         if task:
             qs = task.choices
-            self.fields['answer_choice'] = forms.ModelChoiceField(queryset=qs,
-                                                                  widget=forms.RadioSelect,
-                                                                  empty_label=None)
+            self.fields['answer'] = forms.ModelChoiceField(queryset=qs,
+                                                           widget=forms.RadioSelect,
+                                                           empty_label=None)
 
 
 class ExportForm(forms.ModelForm):
