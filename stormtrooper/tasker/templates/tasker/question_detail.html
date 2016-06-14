@@ -24,14 +24,6 @@
             </table>
         </div>
         <div class="box">
-            {% if form.answer.errors %}
-            {% for error in form.answer.errors %}
-            <div class="notification is-danger">
-                <button class="delete"></button>
-                {{ error|escape }}
-            </div>
-            {% endfor %}
-            {% endif %}
             {% if form.answer_choice.errors %}
             {% for error in form.answer_choice.errors %}
             <div class="notification is-danger">
@@ -45,7 +37,7 @@
                 {% if task.is_multiple_choice %}
                 <p class="control">
                     <ul>
-                        {% for choice in form.answer_choice %}
+                    {% for choice in form.answer_choice %}
                     <li>
                     <label class="radio">
                        {{ choice }}
@@ -55,9 +47,15 @@
                     </ul>
                 </p>
                 {% else %}
-                <p class="control">
-                    <label class="label">{{ form.answer.label_tag }}</label>
+                <label class="label">{{ form.answer.label_tag }}</label>
+                <p class="control{% if form.answer.errors %} has-icon has-icon-right{% endif %}">
+                    {% if form.answer.errors %}
+                    {{ form.answer|addcss:"input is-danger" }}
+                    <i class="fa fa-warning"></i>
+                    {% for error in form.answer.errors %}<span class="help is-danger">{{ error|escape }}</span>{% endfor %}
+                    {% else %}
                     {{ form.answer|addcss:"input" }}
+                    {% endif %}
                 </p>
                 {% endif %}
                 <div class="control is-horizontal">
