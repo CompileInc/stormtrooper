@@ -17,7 +17,7 @@
                     {% for k,v in question.question.items %}
                     <tr>
                         <td>{{ k }}</td>
-                        <td>{{ v }}</td>
+                        <td>{{ v|urlize }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -57,7 +57,7 @@
                 {% else %}
                 <p class="control">
                     <label class="label">{{ form.answer.label_tag }}</label>
-                    {{ form.answer | addcss:"input" }}
+                    {{ form.answer|addcss:"input" }}
                 </p>
                 {% endif %}
                 <div class="control is-horizontal">
