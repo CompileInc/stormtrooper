@@ -1,0 +1,3 @@
+-r requirements.txt
+django-seed==0.1.6
+

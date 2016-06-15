@@ -1,4 +1,6 @@
-from stormtrooper.settings import BASE_DIR
+from stormtrooper.settings import BASE_DIR, INSTALLED_APPS
+
+INSTALLED_APPS = INSTALLED_APPS + ('django_seed', )
 
 MEDIA_ROOT = "%s/media/" % (BASE_DIR)
 STATIC_ROOT = "%s/static/" % (BASE_DIR)
