@@ -20,7 +20,8 @@ from .plugins import initialize_plugins, get_plugin
 import datetime
 from .utils import url_with_params
 from django.contrib.postgres.fields import JSONField
-import time
+import random
+import string
 
 initialize_plugins()
 
@@ -182,8 +183,9 @@ class Question(models.Model):
 
     def save(self, *args, **kwargs):
         if self.slug in EMPTY_VALUES:
-            content = "%s%s".format(str(self.question),
-                                    str(int(time.time())))
+            rs = ''.join(random.choice(string.lowercase) for i in range(10))
+            content = "{}{}".format(str(self.question),
+                                    str(rs))
             self.slug = hashlib.sha1(content).hexdigest()
 
         return super(Question, self).save(*args, **kwargs)
