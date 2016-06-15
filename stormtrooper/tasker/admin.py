@@ -59,7 +59,13 @@ class QuestionAdmin(admin.ModelAdmin):
     raw_id_fields = ('task',)
     readonly_fields = ('task', 'question', 'slug')
 
+
+class AnswerAdmin(admin.ModelAdmin):
+    list_display = ('question', 'answer', 'answered_by')
+    raw_id_fields = ('question', 'answered_by')
+    readonly_fields = ('question', 'answer', 'answered_by')
+
 admin.site.register(Task, TaskAdmin)
 admin.site.register(Choice, ChoiceAdmin)
 admin.site.register(Question, QuestionAdmin)
-admin.site.register(Answer)
+admin.site.register(Answer, AnswerAdmin)

@@ -232,12 +232,17 @@ class Answer(models.Model):
         unique_together = ('question', 'answered_by')
 
     def __unicode__(self):
-        choice_id = self.answer.get("choice_id")
-        if choice_id and choice_id not in EMPTY_VALUES:
-            return unicode(Choice.objects.get(task=self.question.task,
-                                              id=int(choice_id)))
-
-        return self.answer['verbose']
+        answer = self.answer
+        try:
+            choice_id = self.answer.get("choice_id")
+            if choice_id and choice_id not in EMPTY_VALUES:
+                answer = unicode(Choice.objects.get(task=self.question.task,
+                                                    id=int(choice_id)))
+            else:
+                answer = self.answer['verbose']
+        except AttributeError:
+            pass
+        return answer
 
     @property
     def data(self):

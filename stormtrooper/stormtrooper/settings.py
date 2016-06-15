@@ -47,6 +47,7 @@ INSTALLED_APPS = (
     'djangobower',
     'el_pagination',
     'channels',
+    'django_seed',
 )
 
 MIDDLEWARE_CLASSES = (
