@@ -10,7 +10,6 @@ from django.db import models, transaction
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-from jsonfield.fields import JSONField
 from django.utils.functional import cached_property
 import unicodecsv
 from django.core.urlresolvers import reverse
@@ -20,6 +19,8 @@ from channels import Channel
 from .plugins import initialize_plugins, get_plugin
 import datetime
 from .utils import url_with_params
+from django.contrib.postgres.fields import JSONField
+import time
 
 initialize_plugins()
 
@@ -172,14 +173,23 @@ class Choice(models.Model):
 
 class Question(models.Model):
     task = models.ForeignKey(Task)
-    question = JSONField()
+    question = JSONField(default=dict({'key1': 'value1',
+                                       'key2': 'value2'}))
     slug = models.SlugField(null=True, blank=True)
+
+    def __unicode__(self):
+        return str(self.slug)
 
     def save(self, *args, **kwargs):
         if self.slug in EMPTY_VALUES:
-            self.slug = hashlib.sha1(str(self.question)).hexdigest()
+            content = "%s%s".format(str(self.question),
+                                    str(int(time.time())))
+            self.slug = hashlib.sha1(content).hexdigest()
 
         return super(Question, self).save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse('question-detail', args=[self.slug])
 
     def compute_answer(self, answers, is_best_of):
         votes = None
@@ -203,9 +213,6 @@ class Question(models.Model):
         return {'ST_TASK_%s_ANSWER' % (self.task.id): answer,
                 'ST_TASK_%s_VOTES' % (self.task.id): votes}
 
-    def get_absolute_url(self):
-        return reverse('question-detail', args=[self.slug])
-
     @property
     def answer(self):
         answer_set = self.answer_set.all()
@@ -216,13 +223,11 @@ class Question(models.Model):
                                            self.task.is_best_of))
         return answers
 
-    def __unicode__(self):
-        return str(self.slug)
-
 
 class Answer(models.Model):
     question = models.ForeignKey(Question)
-    answer = JSONField()
+    answer = JSONField(default=dict({'choice_id': None,
+                                     'verbose': 'Default Answer'}))
     answered_by = models.ForeignKey(settings.AUTH_USER_MODEL)
 
     '''Use this field in future to mark if this answer was chosen.'''

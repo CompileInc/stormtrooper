@@ -1,5 +1,13 @@
 # Installation
 
+## Database (postgres 9.4)
+
+    CREATE DATABASE stormtrooper;
+    CREATE ROLE trooper PASSWORD 'trooper' LOGIN;
+    GRANT ALL PRIVILEGES ON DATABASE stormtrooper TO trooper;
+
+## Python
+
     pip install -r requirements.txt
     pip install -r requirements-dev.txt # development
     cd stormtrooper
@@ -7,3 +15,5 @@
     python manage.py seed tasker --number=15 # development
     python manage.py bower install
     python manage.py createsuperuser
+
+

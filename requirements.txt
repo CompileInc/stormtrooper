@@ -3,7 +3,7 @@ channels==0.14.0
 Django==1.9.6
 django-bower==5.1.0
 django-el-pagination==2.1.2
-jsonfield==1.0.3
+psycopg2==2.6.1
 python-social-auth==0.2.19
 pytz==2016.4
 tldextract==2.0.1
