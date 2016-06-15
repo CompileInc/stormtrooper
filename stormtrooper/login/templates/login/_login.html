@@ -7,4 +7,7 @@
     </span>
     <span> Sign in</span>
   </a>
+  {% if settings.SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS %}
+  <span class="help">Allowed email domains: @{{ settings.SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS|join:", @" }}</span>
+  {% endif %}
 </div>

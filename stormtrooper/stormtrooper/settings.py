@@ -82,6 +82,7 @@ TEMPLATES = [
                 'django.core.context_processors.request',
                 'social.apps.django_app.context_processors.backends',
                 'social.apps.django_app.context_processors.login_redirect',
+                'django_settings_export.settings_export',
             ],
         },
     },
@@ -156,3 +157,6 @@ try:
     from local_settings import *
 except ImportError:
     pass
+
+
+SETTINGS_EXPORT = ['SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS']
