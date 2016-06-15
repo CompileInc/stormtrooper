@@ -116,7 +116,8 @@ class QuestionDetailView(DetailView, FormMixin, ProcessFormView):
 
     def get_context_data(self, **kwargs):
         context = super(QuestionDetailView, self).get_context_data(**kwargs)
-        context['task'] = self.object.task
+        context.update({'task': self.object.task,
+                        'progress': self.object.task.progress(self.request.user)})
         return context
 
     def form_valid(self, form):
