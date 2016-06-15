@@ -24,6 +24,13 @@
         </div>
       </div>
     </div>
+    <div class="columns">
+      <div class="column is-8 is-offset-2">
+        {% if progress > 0 or question %}
+        <progress class="progress is-success" value="{{ progress }}" max="100" title="Progress {{ progress|intcomma }}%">{{ progress }}%</progress>
+        {% endif %}
+      </div>
+    </div>
     {% block task_content %}
     {% endblock %}
   </div>

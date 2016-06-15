@@ -46,9 +46,6 @@
             </div>
             {% endif %}
         </nav>
-        {% if progress > 0 %}
-        <progress class="progress is-success" value="{{ progress }}" max="100" title="Progress {{ progress|intcomma }}%">{{ progress }}%</progress>
-        {% endif %}
     </div>
 </div>
 {% if request.user == task.created_by %}
