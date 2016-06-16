@@ -1,5 +1,13 @@
 # Installation
 
+## Docker
+
+install docker
+
+    pip install docker-compose
+    docker-compose up
+    docker exec stormtrooper_db_1 createdb -Upostgres stormtrooper
+
 ## Database (postgres 9.4)
 
     CREATE DATABASE stormtrooper;
