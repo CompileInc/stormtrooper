@@ -8,6 +8,13 @@ install docker
     docker-compose up
     docker exec stormtrooper_db_1 createdb -Upostgres stormtrooper
 
+If you're using OSX, app would be hosted on the docker-machine's IP.
+You can find it out by doing
+
+    docker-machine ip MACHINE_NAME
+
+`MACHINE_NAME` is usually `default`
+
 ## Database (postgres 9.4)
 
     CREATE DATABASE stormtrooper;
