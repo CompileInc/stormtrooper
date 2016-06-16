@@ -19,9 +19,6 @@
           {% elif task.is_active %}
           <span class="tag is-success">ACTIVE</span>
           {% endif %}</h1>
-        <div class="box">
-          {{ task.description|linebreaks|safe }}
-        </div>
       </div>
     </div>
     <div class="columns">
@@ -29,6 +26,9 @@
         {% if progress > 0 or question %}
         <progress class="progress is-success" value="{{ progress }}" max="100" title="Progress {{ progress|intcomma }}%">{{ progress }}%</progress>
         {% endif %}
+        <div class="box">
+          {{ task.description|linebreaks|safe }}
+        </div>
       </div>
     </div>
     {% block task_content %}
