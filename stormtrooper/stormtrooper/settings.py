@@ -16,6 +16,7 @@ from django.conf.global_settings import STATICFILES_FINDERS
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+PROJECT_DIR = os.path.dirname(BASE_DIR)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
@@ -153,6 +154,8 @@ CHANNEL_LAYERS = {
     }
 }
 
+SETTINGS_EXPORT = []
+
 try:
     from docker_settings import *
 except ImportError:
@@ -163,5 +166,3 @@ try:
 except ImportError:
     pass
 
-
-SETTINGS_EXPORT = ['SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS']
