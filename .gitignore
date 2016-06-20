@@ -58,6 +58,7 @@ media/
 static/
 stormtrooper/stormtrooper/static/
 stormtrooper/stormtrooper/local_settings.py
+stormtrooper/stormtrooper/docker_settings.py
 
 # Sphinx documentation
 docs/_build/
