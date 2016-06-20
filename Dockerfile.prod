@@ -1,0 +1,17 @@
+FROM python:2.7.11
+
+ENV PYTHONBUFFERED 1
+ENV APPLICATION_ROOT /stormtrooper/
+# install supervisor
+RUN pip install supervisor supervisor-stdout
+# add log dirs for supervisor
+RUN mkdir -p /var/log/supervisor
+# copy correct supervisor configuration from scripts
+COPY deploy/supervisor/supervisord_dev.conf /etc/supervisor/supervisord.conf
+
+RUN mkdir -p $APPLICATION_ROOT
+WORKDIR $APPLICATION_ROOT
+ADD requirements.txt $APPLICATION_ROOT
+ADD requirements-dev.txt $APPLICATION_ROOT
+RUN pip install -r requirements-dev.txt
+ADD . $APPLICATION_ROOT
