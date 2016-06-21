@@ -23,3 +23,8 @@ if SENTRY_ENABLE:
     }
     INSTALLED_APPS = INSTALLED_APPS + ('raven.contrib.django.raven_compat', )
     SETTINGS_EXPORT = SETTINGS_EXPORT + ['RAVEN_CONFIG']
+
+try:
+    from docker_settings import *
+except ImportError:
+    pass
