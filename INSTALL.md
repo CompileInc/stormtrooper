@@ -1,20 +1,5 @@
 # Installation
 
-## Docker
-
-install docker
-
-    pip install docker-compose
-    docker-compose up
-    docker exec stormtrooper_db_1 createdb -Upostgres stormtrooper
-
-If you're using OSX, app would be hosted on the docker-machine's IP.
-You can find it out by doing
-
-    docker-machine ip MACHINE_NAME
-
-`MACHINE_NAME` is usually `default`
-
 ## Database (postgres 9.4)
 
     CREATE DATABASE stormtrooper;
@@ -32,3 +17,17 @@ You can find it out by doing
     python manage.py createsuperuser
 
 
+## Docker
+
+Install docker
+
+    pip install docker-compose
+    docker-compose up
+    docker exec stormtrooper_db_1 createdb -Upostgres stormtrooper
+
+If you're using OSX, app would be hosted on the docker-machine's IP.
+You can find it out by doing
+
+    docker-machine ip MACHINE_NAME
+
+`MACHINE_NAME` is usually `default`
