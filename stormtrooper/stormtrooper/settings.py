@@ -120,7 +120,7 @@ USE_L10N = True
 USE_TZ = True
 
 # Custom user model
-AUTH_USER_MODEL = 'login.CustomUser'
+AUTH_USER_MODEL = 'login.Trooper'
 
 # Python social auth settings
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = 'my-google-key'

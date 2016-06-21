@@ -263,7 +263,7 @@ class Export(models.Model):
     STATUS_CHOICES = ((PROCESSING, "Processing"), (FAILURE, "Failure"), (SUCCESS, "Success"))
 
     task = models.ForeignKey(Task)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL)
     export_file = models.FileField(upload_to='exports/%Y/%m/%d/', blank=True, null=True)
     status = models.CharField(max_length=2, choices=STATUS_CHOICES, default=PROCESSING)
     created_on = models.DateField(auto_now_add=True)

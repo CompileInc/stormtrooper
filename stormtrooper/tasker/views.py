@@ -84,7 +84,7 @@ class TaskExportView(CreateView):
         return self.object.task.get_absolute_url()
 
     def form_valid(self, form):
-        form.instance.user = self.request.user
+        form.instance.created_by = self.request.user
         return super(TaskExportView, self).form_valid(form)
 
     def form_invalid(self, form):
