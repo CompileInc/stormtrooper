@@ -45,6 +45,7 @@ INSTALLED_APPS = (
     'stormtrooper',
     'login',
     'tasker',
+    'compressor',
     'el_pagination',
     'channels',
 )
@@ -149,6 +150,9 @@ CHANNEL_LAYERS = {
 }
 
 SETTINGS_EXPORT = []
+COMPRESS_ENABLED = True
+
+STATICFILES_FINDERS = STATICFILES_FINDERS + ['compressor.finders.CompressorFinder']
 
 try:
     from local_settings import *

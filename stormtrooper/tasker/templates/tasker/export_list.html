@@ -22,7 +22,7 @@
           {% if e.export_file %}
           <tr>
             <td>{{ e.created_on }}</td>
-            <td>{{ e.created_by }}</td>
+            <td>{% include "login/profile_pic.html" with user=e.created_by %}</td>
             <td><a class="button is-danger" title="export" href="{{ e.export_file.url }}"><i class="fa fa-download"></i></a></td>
           </tr>
           {% endif %}

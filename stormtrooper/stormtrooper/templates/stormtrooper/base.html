@@ -1,4 +1,4 @@
-{% load static %}
+{% load static compress %}
 <!doctype html>
 <html class="no-js" lang="">
     <head>
@@ -30,6 +30,15 @@
         {% block css %}
         <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/bulma/0.0.28/css/bulma.min.css">
         <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/hint.css/2.3.1/hint.min.css">
+        {% compress css %}
+        <style type="text/css">
+          .avatar {
+            border-radius: 50%;
+            vertical-align: middle;
+          }
+        </style>
+        {% endcompress css %}
         {% endblock css %}
 
         {% block extra_css %}
@@ -55,7 +64,7 @@
                 {% if request.user.is_authenticated %}
                 <div class="nav-right">
                   <span class="nav-item">
-                    {{ request.user.username }}
+                    {% include "login/profile_pic.html" with user=request.user %}
                   </span>
                   <span class="nav-item">
                     <a href="{% url 'accounts-logout' %}" class="button">Logout</a>
@@ -75,7 +84,7 @@
                 <div class="column is-8 is-offset-2">
                     {% for message in messages %}
                     <div class="notification is-primary">
-                        <button class="delete" onClick="removeNotification(this)"></button>
+                        <button class="delete"></button>
                         {{ message }}
                     </div>
                     {% endfor %}
@@ -94,6 +103,7 @@
 
     {% block js %}
     <script src="//cdnjs.cloudflare.com/ajax/libs/cash/1.3.0/cash.min.js"></script>
+    {% compress js %}
     <script type="text/javascript">
       $(function(){
         $(".notification .delete").on("click", function(){
@@ -106,6 +116,7 @@
         });
       });
     </script>
+    {% endcompress js %}
     {% endblock js %}
 
     {% block extra_js %}

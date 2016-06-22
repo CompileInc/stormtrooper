@@ -12,7 +12,7 @@
         </h1>
       </div>
       <div class="column is-8">
-        <small>{{ task.created_on }}</small>
+        <small>{{ task.created_on }} • {% include "login/profile_pic.html" with user=task.created_by %}</small>
         <h1 class="title">{{ task.title }}
           {% if task.is_closed %}
           <span class="tag is-danger">CLOSED</span>
