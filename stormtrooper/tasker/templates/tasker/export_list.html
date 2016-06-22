@@ -12,7 +12,7 @@
         </div>
         <div class="level-right">
           <p class="level-item">
-            {% include "tasker/export_form_inc.html" with size="small"%}
+            {% include "tasker/export_form_inc.html" %}
           </p>
         </div>
       </div>
@@ -34,7 +34,7 @@
           <tr>
             <td>{{ e.created_on }}</td>
             <td>{% include "login/profile_pic.html" with user=e.created_by %}</td>
-            <td><a class="button is-danger" title="export" href="{{ e.export_file.url }}"><i class="fa fa-download"></i></a></td>
+            <td class="has-text-right"><a class="button is-danger is-outlined" title="export" href="{{ e.export_file.url }}"><i class="fa fa-download"></i></a></td>
           </tr>
           {% endif %}
           {% endfor %}

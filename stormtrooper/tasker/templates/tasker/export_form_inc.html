@@ -1,4 +1,4 @@
 <form action ="{% url 'task-export' %}" method="post" class="control">
   {% csrf_token %}{{ export_form }}
-  <button class="button is-primary is-outlined {% if size %}is-{{size}}{% else %}is-medium{% endif %}" title="Create export"><i class="fa fa-plus"></i></button>
+  <button class="button is-primary is-outlined {% if size %}is-{{size}}{% else %}{% endif %}" title="Create export"><i class="fa fa-plus"></i></button>
 </form>

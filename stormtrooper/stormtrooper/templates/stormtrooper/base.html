@@ -1,5 +1,4 @@
-{% load static compress %}
-<!doctype html>
+{% load static compress %}{% spaceless %}<!doctype html>
 <html class="no-js" lang="">
     <head>
         <meta charset="utf-8">
@@ -50,7 +49,7 @@
 
     </head>
     <body>
-    <div class="hero is-info">
+    <div class="hero is-info is-bold">
       <div class="hero-head">
         <div class="container">
           <div class="columns">
@@ -68,7 +67,11 @@
                     {% include "login/profile_pic.html" with user=request.user %}
                   </span>
                   <span class="nav-item">
-                    <a href="{% url 'accounts-logout' %}" class="button">Logout</a>
+                    <a href="{% url 'accounts-logout' %}" class="hint--bottom" aria-label="Logout">
+                      <span class="icon">
+                        <i class="fa fa-sign-out"></i>
+                      </span>
+                    </a>
                   </span>
                 </div>
                 {% endif %}
@@ -125,3 +128,4 @@
 
     </body>
 </html>
+{% endspaceless %}

@@ -49,11 +49,19 @@
                 <td>{% include 'login/profile_pic.html' with user=task.created_by %}</td>
                 <td>{% if task.is_closed %}<span class="tag is-small is-danger">CLOSED</span>{% endif %}</td>
                 <td>
-                  <a href="{{ task.get_absolute_url }}" class="button is-outlined is-info" title="Details"><i class="fa fa-ellipsis-h"></i></a>
-                  <a href="{% url 'task-play' task.id %}" class="button is-outlined is-success" title="Start"><i class="fa fa-play-circle"></i></a>
-                  {% if task.has_exports %}
-                  <a href="{% url 'export-list' task.id %}" class="button is-outlined is-danger" title="past exports"><i class="fa fa-download"></i></a>
-                  {% endif %}
+                  <div class="control is-grouped is-pulled-right">
+                    <p class="control">
+                      <a href="{{ task.get_absolute_url }}" class="button is-outlined is-info" title="Details"><i class="fa fa-ellipsis-h"></i></a>
+                    </p>
+                    <p class="control">
+                      <a href="{% url 'task-play' task.id %}" class="button is-outlined is-success" title="Start"><i class="fa fa-play-circle"></i></a>
+                    </p>
+                    {% if task.has_exports %}
+                    <p class="control">
+                      <a href="{% url 'export-list' task.id %}" class="button is-outlined is-danger" title="past exports"><i class="fa fa-download"></i></a>
+                    </p>
+                    {% endif %}
+                  </div>
                 </td>
               </tr>
               {% endfor %}
