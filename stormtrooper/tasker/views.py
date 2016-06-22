@@ -49,7 +49,8 @@ class TaskPlayView(View):
             task_obj = Task.objects.get(pk=pk)
             if not task_obj.is_closed:
                 exclude = request.GET.get('exclude')
-                random_qn = task_obj.random_question(user=request.user, exclude=exclude)
+                random_qn = task_obj.random_question(user=request.user,
+                                                     exclude=exclude)
                 if random_qn:
                     return HttpResponseRedirect(random_qn.get_absolute_url())
                 messages.add_message(self.request, messages.ERROR, "There are no more unanswered questions")

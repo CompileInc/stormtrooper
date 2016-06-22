@@ -115,7 +115,7 @@ class Task(models.Model):
         return base_qs.exclude(answered_by=None).count()
 
     def progress(self, user=None):
-        if user:
+        if user and self.no_of_questions > 0:
             return floor(self.answered(user=user) / self.no_of_questions * 100)
         return None
 
@@ -152,7 +152,7 @@ class Task(models.Model):
             answered_qs = list(answered_qs)
             if exclude:
                 answered_qs.append(exclude)
-            questions = questions.exclude(id__in=answered_qs)
+            questions = questions.exclude(slug__in=answered_qs)
         return questions.order_by('?').first()
 
     @property
