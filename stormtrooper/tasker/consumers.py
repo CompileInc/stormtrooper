@@ -15,7 +15,7 @@ def tasker_questions_create(message):
 def tasker_export_send(message):
     export = Export.objects.get(id=message['export_id'])
     if export.status == Export.SUCCESS:
-        user = export.user
+        user = export.created_by
         to_addr = [user.email]
         attachment = export.export_file.file.name
         data_dict = {'username': user.username,
