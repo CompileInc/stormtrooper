@@ -1,7 +1,8 @@
 from django import forms
-from tasker.models import Export, Answer
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
+
+from tasker.models import Export, Answer
 
 
 class TextAnswerForm(forms.Form):

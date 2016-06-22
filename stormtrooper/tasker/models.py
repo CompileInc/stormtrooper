@@ -1,7 +1,12 @@
 from __future__ import division, unicode_literals
+from collections import Counter
 from math import floor
 import StringIO
-import unicodecsv as csv
+import datetime
+import hashlib
+import random
+import string
+import urllib
 
 from django.core.files.base import ContentFile
 from django.conf import settings
@@ -9,19 +14,15 @@ from django.core.validators import EMPTY_VALUES
 from django.db import models, transaction
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-
-from django.utils.functional import cached_property
-import unicodecsv
-from django.core.urlresolvers import reverse
-import hashlib
-from collections import Counter
-from channels import Channel
-from .plugins import initialize_plugins, get_plugin
-import datetime
-from .utils import url_with_params
 from django.contrib.postgres.fields import JSONField
-import random
-import string
+from django.utils.functional import cached_property
+from django.core.urlresolvers import reverse
+
+from channels import Channel
+import unicodecsv as csv
+
+from .plugins import initialize_plugins, get_plugin
+
 
 initialize_plugins()
 
@@ -70,7 +71,7 @@ class Task(models.Model):
     def get_task_play_url(self, exclude=None):
         url = reverse('task-play', args=[self.id])
         if exclude:
-            return url_with_params(url, exclude=exclude)
+            return "{}?{}".format(url, urllib.urlencode(exclude))
         return url
 
     def get_task_export_url(self):
@@ -127,7 +128,7 @@ class Task(models.Model):
     @transaction.atomic
     def process(self, activate=False):
         if not self.is_questions_created:
-            data = list(unicodecsv.DictReader(self.csv.file))
+            data = list(csv.DictReader(self.csv.file))
             for d in data:
                 Question.objects.create(task=self,
                                         question=d)

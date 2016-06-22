@@ -1,16 +1,17 @@
-from django.views.generic.list import ListView
-from django.views.generic.detail import DetailView, SingleObjectMixin
-from django.views.generic.edit import FormMixin, ProcessFormView, CreateView
+import logging
+
+from django.contrib import messages
+from django.http.response import Http404, HttpResponseRedirect
+from django.utils.encoding import force_text
 from django.views.generic import View
 from django.views.generic.base import ContextMixin
-from django.http.response import Http404, HttpResponseRedirect
-from django.core.urlresolvers import reverse
-from django.utils.encoding import force_text
-from django.contrib import messages
+from django.views.generic.detail import DetailView, SingleObjectMixin
+from django.views.generic.edit import FormMixin, ProcessFormView, CreateView
+from django.views.generic.list import ListView
 
-from tasker.models import Task, Question, Answer, Export
 from tasker.forms import TextAnswerForm, ChoiceAnswerForm, ExportForm
-import logging
+from tasker.models import Task, Question, Answer, Export
+
 
 LOG = logging.getLogger(__name__)
 

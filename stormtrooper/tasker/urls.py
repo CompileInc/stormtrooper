@@ -1,7 +1,8 @@
 from django.conf.urls import url
+from django.contrib.auth.decorators import login_required
+
 from tasker.views import TaskListView, TaskDetailView, QuestionDetailView,\
                          TaskPlayView, TaskExportView, ExportListView
-from django.contrib.auth.decorators import login_required
 
 
 urlpatterns = (url(r'^$',

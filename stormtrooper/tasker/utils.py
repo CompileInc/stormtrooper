@@ -1,8 +1,7 @@
-from django.utils.safestring import mark_safe
-from django.utils.text import normalize_newlines
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
-import urllib
+from django.utils.safestring import mark_safe
+from django.utils.text import normalize_newlines
 
 
 def remove_newlines(text):
@@ -21,14 +20,6 @@ def send_email_with_attachment(to_addr, attachment, **kwargs):
     email_template = kwargs['email_template']
     subject = remove_newlines(render_to_string(subject_template, data_dict))
     body = render_to_string(email_template, data_dict)
-    email = EmailMessage(
-                         subject = subject,
-                         body = body,
-                         to=to_addr
-                         )
+    email = EmailMessage(subject=subject, body=body, to=to_addr)
     email.attach_file(attachment)
     email.send(fail_silently=True)
-
-
-def url_with_params(url, **kwargs):
-    return "{}?{}".format(url, urllib.urlencode(kwargs))
