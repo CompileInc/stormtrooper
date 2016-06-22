@@ -1,8 +1,10 @@
 asgi-redis==0.13.0
+boto==2.40.0
 channels==0.14.0
 Django>=1.9,<1.10
 django-el-pagination==2.1.2
 django-settings-export==1.1.0
+django-storages==1.4.1
 psycopg2==2.6.1
 python-social-auth==0.2.19
 pytz==2016.4
