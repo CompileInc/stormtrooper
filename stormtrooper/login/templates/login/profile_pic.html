@@ -1,3 +1,3 @@
-<span class="hint--{{orientation|default:'top'}}" aria-label="{{ user.first_name }}">
-  <img src="{{ user.profile_pic }}" class="avatar" title="{{ user.first_name }}"/>
-</span>
+<a class="hint--{{orientation|default:'top'}}" aria-label="{{ user.first_name }}" href="{% url 'accounts-profile' username=user.username %}">
+  <img src="{{ user.profile_pic }}&size={{size|default:30}}" class="avatar" title="{{ user.first_name }}"/>
+</a>

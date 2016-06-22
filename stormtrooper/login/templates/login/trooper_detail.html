@@ -1,0 +1,66 @@
+{% extends "stormtrooper/base.html" %}
+
+{% block content %}
+<div class="section profile">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-2 is-offset-2">
+        <div class="control">{% include "login/profile_pic.html" with user=trooper size="160" %}</div>
+        <div class="subtitle is-5">
+          {{ trooper.get_full_name }}
+          {% if trooper.is_superuser %}
+          <span class="tag is-success is-small">ADMIN</span>
+          {% else %}
+          <span class="tag is-primary is-small">TROOPER</span>
+          {% endif %}
+        </div>
+        <div><strong>{{ trooper.points|default:0 }} Points</strong> <small> (Coming soon)</small></div>
+        <div>Trooper since: {{ trooper.date_joined|date:"d M Y" }}</div>
+        <div>
+          <a href="mailto:{{trooper.email}}" class="button is-small is-primary is-outlined" target="_blank">
+            <span class="icon is-small"><i class="fa fa-envelope-o"></i></span>
+            <span>Email Trooper</span>
+          </a>
+        </div>
+      </div>
+      <div class="column is-6">
+        <div class="">
+          <div class="columns">
+            <div class="column is-6">
+              {% if trooper.is_superuser %}
+              <nav class="panel">
+                <div class="panel-heading">Tasks created</div>
+                <div class="panel-block">
+                  <div class="notification is-warning">
+                    <i class="fa fa-warning"></i> No tasks created.
+                  </div>
+                </div>
+              </nav>
+              {% else %}
+              <nav class="panel">
+                <div class="panel-heading">Recent tasks</div>
+                <div class="panel-block">
+                  <div class="notification is-warning">
+                    <i class="fa fa-warning"></i> No recent tasks.
+                  </div>
+                </div>
+              </nav>
+              {% endif %}
+            </div>
+            <div class="column is-6">
+              <nav class="panel">
+                <div class="panel-heading">Recent answers</div>
+                <div class="panel-block">
+                  <div class="notification is-warning">
+                    <i class="fa fa-warning"></i> No recent answers.
+                  </div>
+                </div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

@@ -12,9 +12,7 @@ class Trooper(AbstractUser):
 
     def profile_pic(self):
         email_hash = hashlib.md5(self.email.lower()).hexdigest()
-        keys = {'d': settings.DEFAULT_AVATAR,
-                'size': 30,
-                }
+        keys = {'d': settings.DEFAULT_AVATAR}
         keys = urllib.urlencode(keys)
         return "https://www.gravatar.com/avatar/{hash}?{query}".format(hash=email_hash,
                                                                        query=keys)
