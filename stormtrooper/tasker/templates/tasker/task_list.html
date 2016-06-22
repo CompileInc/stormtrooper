@@ -6,7 +6,25 @@
   <div class="container">
     <div class="columns">
       <div class="column is-8 is-offset-2">
-        <h1 class="title">Open Tasks</h1>
+        <div class="level">
+          <div class="level-left">
+            <div class="level-item">
+              <h1 class="title">Open Tasks</h1>
+            </div>
+          </div>
+          {% if request.user.is_superuser or request.user.is_staff %}
+          <div class="level-right">
+            <p class="level-item">
+              <a class="button is-success is-outlined" href="{% url 'admin:tasker_task_add' %}">
+                <span class="icon is-small">
+                  <i class="fa fa-plus"></i>
+                </span>
+                <span>New</span>
+              </a>
+            </p>
+          </div>
+          {% endif %}
+        </div>
         <hr />
         {% if task_list %}
         <div class="box">
