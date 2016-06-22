@@ -1,5 +1,5 @@
 {% extends "tasker/task_base.html" %}
-{% load humanize el_pagination_tags %}
+{% load humanize el_pagination_tags urlize %}
 {% load addcss %}
 
 {% block task_content %}
@@ -17,7 +17,7 @@
                     {% for k,v in question.question.items %}
                     <tr>
                         <td>{{ k }}</td>
-                        <td>{{ v|urlize }}</td>
+                        <td>{{ v|urlize_target_blank }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -33,7 +33,7 @@
                 <i class="fa fa-warning"></i>
                 {% for error in form.answer.errors %}<span class="help is-danger">{{ error|escape }}</span>{% endfor %}
                 {% endif %}
-                <ul>
+                <ul class="control">
                   {% for choice in form.answer %}
                   <li>
                     <label class="radio">

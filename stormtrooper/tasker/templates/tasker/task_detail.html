@@ -27,7 +27,7 @@
           {% if request.user.is_staff or request.user == task.created_by %}
           <div class="control is-grouped">
             <p class="control">
-              <a href="{{ task.get_task_play_url }}" class="button is-success is-outlined is-medium" title="Start"><i class="fa fa-play-circle"></i></a>
+              <a href="{{ task.get_task_play_url }}" class="button is-success is-outlined is-medium{% if task.no_of_questions == answerd %} is-disabled{% endif %}" title="Start"><i class="fa fa-play-circle"></i></a>
             </p>
             {% if task.has_exports %}
             <p class="control">
