@@ -154,6 +154,8 @@ COMPRESS_ENABLED = True
 
 STATICFILES_FINDERS = STATICFILES_FINDERS + ['compressor.finders.CompressorFinder']
 
+DEFAULT_AVATAR = 'retro'
+
 try:
     from local_settings import *
 except ImportError:

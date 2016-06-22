@@ -1,6 +1,8 @@
 from __future__ import unicode_literals
 import hashlib
+import urllib
 
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 
 
@@ -10,8 +12,9 @@ class Trooper(AbstractUser):
 
     def profile_pic(self):
         email_hash = hashlib.md5(self.email.lower()).hexdigest()
-        size = 30
-        default = 'retro'
-        return "https://www.gravatar.com/avatar/{hash}?d={default}&size={size}".format(hash=email_hash,
-                                                                                       default=default,
-                                                                                       size=size)
+        keys = {'d': settings.DEFAULT_AVATAR,
+                'size': 30,
+                }
+        keys = urllib.urlencode(keys)
+        return "https://www.gravatar.com/avatar/{hash}?{query}".format(hash=email_hash,
+                                                                       query=keys)
