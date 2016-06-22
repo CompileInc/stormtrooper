@@ -24,21 +24,23 @@
       {% if not task.is_closed and task.is_active %}
       <div class="level-item has-text-centered">
         <p class="title">
-          {% if request.user.is_staff or request.user == task.created_by %}
           <div class="control is-grouped">
-            <p class="control">
+          {% if request.user.is_staff or request.user == task.created_by %}
+            <p class="control hint--top" aria-label="Start">
               <a href="{{ task.get_task_play_url }}" class="button is-success is-outlined is-medium{% if task.no_of_questions == answerd %} is-disabled{% endif %}" title="Start"><i class="fa fa-play-circle"></i></a>
             </p>
             {% if task.has_exports %}
-            <p class="control">
+            <p class="control hint--top" aria-label="Past exports">
               <a href="{% url 'export-list' task.id %}" class="button is-danger is-outlined is-medium" title="Past exports"><i class="fa fa-download"></i></a>
             </p>
             {% endif %}
             {% include "tasker/export_form_inc.html" with size="medium" %}
-          </div>
           {% else %}
-          <a href="{{ task.get_task_play_url }}" class="button is-success is-outlined is-medium" title="Start"><i class="fa fa-play-circle"></i></a>
+          <p class="control hint--top" aria-label="Start">
+            <a href="{{ task.get_task_play_url }}" class="button is-success is-outlined is-medium" title="Start"><i class="fa fa-play-circle"></i></a>
+          </p>
           {% endif %}
+          </div>
         </p>
       </div>
       {% endif %}

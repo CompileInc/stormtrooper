@@ -14,7 +14,7 @@
           </div>
           {% if request.user.is_superuser or request.user.is_staff %}
           <div class="level-right">
-            <p class="level-item">
+            <p class="level-item hint--top" aria-label="New Task">
               <a class="button is-success is-outlined" href="{% url 'admin:tasker_task_add' %}">
                 <span class="icon is-small">
                   <i class="fa fa-plus"></i>
@@ -50,15 +50,15 @@
                 <td>{% if task.is_closed %}<span class="tag is-small is-danger">CLOSED</span>{% endif %}</td>
                 <td>
                   <div class="control is-grouped is-pulled-right">
-                    <p class="control">
+                    <p class="control hint--top" aria-label="Details">
                       <a href="{{ task.get_absolute_url }}" class="button is-outlined is-info" title="Details"><i class="fa fa-ellipsis-h"></i></a>
                     </p>
-                    <p class="control">
+                    <p class="control hint--top" aria-label="Start">
                       <a href="{% url 'task-play' task.id %}" class="button is-outlined is-success" title="Start"><i class="fa fa-play-circle"></i></a>
                     </p>
                     {% if task.has_exports %}
-                    <p class="control">
-                      <a href="{% url 'export-list' task.id %}" class="button is-outlined is-danger" title="past exports"><i class="fa fa-download"></i></a>
+                    <p class="control hint--top" aria-label="Past exports">
+                      <a href="{% url 'export-list' task.id %}" class="button is-outlined is-danger" title="Past exports"><i class="fa fa-download"></i></a>
                     </p>
                     {% endif %}
                   </div>

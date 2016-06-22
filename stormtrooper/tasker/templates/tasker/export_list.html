@@ -34,7 +34,11 @@
           <tr>
             <td>{{ e.created_on }}</td>
             <td>{% include "login/profile_pic.html" with user=e.created_by %}</td>
-            <td class="has-text-right"><a class="button is-danger is-outlined" title="export" href="{{ e.export_file.url }}"><i class="fa fa-download"></i></a></td>
+            <td class="has-text-right">
+              <span class="hint--top" aria-label="Download">
+                <a class="button is-danger is-outlined" title="export" href="{{ e.export_file.url }}"><i class="fa fa-download"></i></a>
+              </span>
+            </td>
           </tr>
           {% endif %}
           {% endfor %}
