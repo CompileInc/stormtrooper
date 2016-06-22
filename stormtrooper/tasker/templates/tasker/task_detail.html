@@ -3,79 +3,79 @@
 
 {% block task_content %}
 <div class="columns">
-    <div class="column is-8 is-offset-2">
-        <nav class="level is-mobile box">
-            <div class="level-item has-text-centered">
-                <p class="heading">Questions</p>
-                <p class="title">{{ task.no_of_questions|intcomma }}</p>
-            </div>
-            <div class="level-item has-text-centered">
-                <p class="heading">Answered</p>
-                <p class="title">{{ answered |default:0 }}</p>
-            </div>
-            <div class="level-item has-text-centered">
-                <p class="heading">Choice</p>
-                {% if task.is_multiple_choice %}
-                <p class="title"><i class="fa fa-check"></i></p>
-                {% else %}
-                <p class="title"><i class="fa fa-close"></i></p>
-                {% endif %}
-            </div>
-            {% if not task.is_closed and task.is_active %}
-            <div class="level-item has-text-centered">
-                <p class="title">
-                  {% if request.user.is_staff or request.user == task.created_by %}
-                  <div class="control is-grouped">
-                    <p class="control">
-                      <a href="{{ task.get_task_play_url }}" class="button is-success is-outlined is-medium" title="Start"><i class="fa fa-play-circle"></i></a>
-                    </p>
-                    {% if task.has_exports %}
-                    <p class="control">
-                      <a href="{% url 'export-list' task.id %}" class="button is-danger is-outlined is-medium" title="Past exports"><i class="fa fa-download"></i></a>
-                    </p>
-                    {% endif %}
-                    <form action ="{% url 'task-export' %}" method="post" class="control">
-                        {% csrf_token %}{{ export_form }}
-                        <button class="button is-primary is-outlined is-medium" title="Export"><i class="fa fa-plus"></i></button>
-                    </form>
-                  </div>
-                  {% else %}
-                  <a href="{{ task.get_task_play_url }}" class="button is-success is-outlined is-medium" title="Start"><i class="fa fa-play-circle"></i></a>
-                  {% endif %}
-                </p>
-            </div>
+  <div class="column is-8 is-offset-2">
+    <nav class="level is-mobile box">
+      <div class="level-item has-text-centered">
+        <p class="heading">Questions</p>
+        <p class="title">{{ task.no_of_questions|intcomma }}</p>
+      </div>
+      <div class="level-item has-text-centered">
+        <p class="heading">Answered</p>
+        <p class="title">{{ answered |default:0 }}</p>
+      </div>
+      <div class="level-item has-text-centered">
+        <p class="heading">Choice</p>
+        {% if task.is_multiple_choice %}
+        <p class="title"><i class="fa fa-check"></i></p>
+        {% else %}
+        <p class="title"><i class="fa fa-close"></i></p>
+        {% endif %}
+      </div>
+      {% if not task.is_closed and task.is_active %}
+      <div class="level-item has-text-centered">
+        <p class="title">
+          {% if request.user.is_staff or request.user == task.created_by %}
+          <div class="control is-grouped">
+            <p class="control">
+              <a href="{{ task.get_task_play_url }}" class="button is-success is-outlined is-medium" title="Start"><i class="fa fa-play-circle"></i></a>
+            </p>
+            {% if task.has_exports %}
+            <p class="control">
+              <a href="{% url 'export-list' task.id %}" class="button is-danger is-outlined is-medium" title="Past exports"><i class="fa fa-download"></i></a>
+            </p>
             {% endif %}
-        </nav>
-    </div>
+            <form action ="{% url 'task-export' %}" method="post" class="control">
+              {% csrf_token %}{{ export_form }}
+              <button class="button is-primary is-outlined is-medium" title="Export"><i class="fa fa-plus"></i></button>
+            </form>
+          </div>
+          {% else %}
+          <a href="{{ task.get_task_play_url }}" class="button is-success is-outlined is-medium" title="Start"><i class="fa fa-play-circle"></i></a>
+          {% endif %}
+        </p>
+      </div>
+      {% endif %}
+    </nav>
+  </div>
 </div>
 {% if request.user == task.created_by %}
 <div class="columns">
-              <div class="column is-8 is-offset-2">
-                <div class="box">
-                  <h3 class="title">Questions</h3>
-                  <hr />
-                  <table class="table is-striped">
-                    <thead>
-                      <tr>
-                        {% for k in task.question_template %}
-                        <th> {{ k }}</th>
-                        {% endfor %}
-              </tr>
-            </thead>
-                    <tbody>
-                      {% paginate task.questions as questions %}
-                      {% for q in questions %}
-                      <tr>
-                        {% for k, qi in q.question.items %}
-                        <td>{{ qi }}</td>
-                        {% endfor %}
-              </tr>
-                      {% endfor %}
-            </tbody>
-          </table>
-                  {% show_pages %}
-        </div>
-      </div>
+  <div class="column is-8 is-offset-2">
+    <div class="box">
+      <h3 class="title">Questions</h3>
+      <hr />
+      <table class="table is-striped">
+        <thead>
+          <tr>
+            {% for k in task.question_template %}
+            <th> {{ k }}</th>
+            {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% paginate task.questions as questions %}
+          {% for q in questions %}
+          <tr>
+            {% for k, qi in q.question.items %}
+            <td>{{ qi }}</td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% show_pages %}
     </div>
+  </div>
+</div>
 {% endif %}
 {% endblock %}
