@@ -2,25 +2,35 @@
 {% load humanize el_pagination_tags %}
 {% block task_content %}
 <div class="columns">
-    <div class="column is-8 is-offset-2">
-        <div class="box">
-            <h3 class="title">Exports</h3>
-            <hr />
-            <table class="table is-striped">
-                <tbody>
-                    {% paginate object_list as exports %}
-                    {% for e in exports %}
-                    {% if e.export_file %}
-                    <tr>
-                        <td>{{ e.created_on }}</td>
-                        <td><a class="button is-danger" title="export" href="{{ e.export_file.url }}"><i class="fa fa-download"></i></a></td>
-                    </tr>
-                    {% endif %}
-                    {% endfor %}
-                </tbody>
-            </table>
-            {% show_pages %}
-        </div>
+  <div class="column is-8 is-offset-2">
+    <div class="box">
+      <h3 class="title">Exports</h3>
+      <hr />
+      <table class="table is-striped">
+        <thead>
+          <thead>
+            <tr>
+              <th>Created on</th>
+              <th>Created by</th>
+              <th></th>
+            </tr>
+          </thead>
+        </thead>
+        <tbody>
+          {% paginate object_list as exports %}
+          {% for e in exports %}
+          {% if e.export_file %}
+          <tr>
+            <td>{{ e.created_on }}</td>
+            <td>{{ e.created_by }}</td>
+            <td><a class="button is-danger" title="export" href="{{ e.export_file.url }}"><i class="fa fa-download"></i></a></td>
+          </tr>
+          {% endif %}
+          {% endfor %}
+        </tbody>
+      </table>
+      {% show_pages %}
     </div>
+  </div>
 </div>
 {% endblock %}

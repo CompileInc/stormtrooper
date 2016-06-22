@@ -21,7 +21,7 @@
 Install docker
 
     pip install docker-compose
-    docker-compose up
+    docker-compose up --build
     docker exec stormtrooper_db_1 createdb -Upostgres stormtrooper
 
 If you're using OSX, app would be hosted on the docker-machine's IP.
