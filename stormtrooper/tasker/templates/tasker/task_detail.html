@@ -34,10 +34,7 @@
               <a href="{% url 'export-list' task.id %}" class="button is-danger is-outlined is-medium" title="Past exports"><i class="fa fa-download"></i></a>
             </p>
             {% endif %}
-            <form action ="{% url 'task-export' %}" method="post" class="control">
-              {% csrf_token %}{{ export_form }}
-              <button class="button is-primary is-outlined is-medium" title="Export"><i class="fa fa-plus"></i></button>
-            </form>
+            {% include "tasker/export_form_inc.html" %}
           </div>
           {% else %}
           <a href="{{ task.get_task_play_url }}" class="button is-success is-outlined is-medium" title="Start"><i class="fa fa-play-circle"></i></a>

@@ -69,6 +69,7 @@ class ExportListView(ListView, SingleObjectMixin):
     def get_context_data(self, **kwargs):
         context = super(ExportListView, self).get_context_data(**kwargs)
         context['task'] = self.object
+        context['export_form'] = ExportForm(initial={'task': self.object})
         return context
 
     def get_queryset(self):
@@ -80,10 +81,12 @@ class TaskExportView(CreateView):
     form_class = ExportForm
 
     def get_success_url(self):
+        url = self.request.META.get('HTTP_REFERER',
+                                    self.object.task.get_absolute_url())
         if self.object:
             messages.add_message(self.request, messages.INFO, "Your export has been queued")
             LOG.info("Export queued")
-        return self.object.task.get_absolute_url()
+        return url
 
     def form_valid(self, form):
         form.instance.created_by = self.request.user

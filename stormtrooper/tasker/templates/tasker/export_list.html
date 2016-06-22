@@ -4,7 +4,18 @@
 <div class="columns">
   <div class="column is-8 is-offset-2">
     <div class="box">
-      <h3 class="title">Exports</h3>
+      <div class="level">
+        <div class="level-left">
+          <div class="level-item">
+            <h3 class="title">Exports</h3>
+          </div>
+        </div>
+        <div class="level-right">
+          <p class="level-item">
+            {% include "tasker/export_form_inc.html" with size="small"%}
+          </p>
+        </div>
+      </div>
       <hr />
       <table class="table is-striped">
         <thead>
