@@ -1,5 +1,5 @@
 {% extends "tasker/task_base.html" %}
-{% load humanize el_pagination_tags %}
+{% load humanize el_pagination_tags urlize %}
 
 {% block task_content %}
 <div class="columns">
@@ -47,7 +47,7 @@
     </nav>
   </div>
 </div>
-{% if request.user == task.created_by %}
+
 <div class="columns">
   <div class="column is-8 is-offset-2">
     <div class="box">
@@ -66,7 +66,7 @@
           {% for q in questions %}
           <tr>
             {% for k, qi in q.question.items %}
-            <td>{{ qi }}</td>
+            <td>{{ qi|urlize_target_blank }}</td>
             {% endfor %}
           </tr>
           {% endfor %}
@@ -76,5 +76,5 @@
     </div>
   </div>
 </div>
-{% endif %}
+
 {% endblock %}
