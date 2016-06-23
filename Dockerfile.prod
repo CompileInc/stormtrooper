@@ -2,6 +2,7 @@ FROM python:2.7.11
 
 ENV PYTHONBUFFERED 1
 ENV APPLICATION_ROOT /stormtrooper/
+ENV LC_ALL C
 # install supervisor
 RUN pip install supervisor supervisor-stdout
 # add log dirs for supervisor
