@@ -18,7 +18,7 @@
           {% elif task.is_active %}
           <span class="tag is-success">ACTIVE</span>
           {% endif %}</h1>
-        <small>{{ task.created_on }} • <a href="{% url 'accounts-profile' username=task.created_by.username }}">{{ task.created_by.first_name }}</a></small>
+        <small>{{ task.created_on }} • <a href="{% url 'accounts-profile' username=task.created_by.username %}">{{ task.created_by.first_name }}</a></small>
       </div>
     </div>
     <div class="columns">

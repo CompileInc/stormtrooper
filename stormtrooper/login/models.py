@@ -4,9 +4,11 @@ import urllib
 
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
+from django.utils.functional import cached_property
 
 
 class Trooper(AbstractUser):
+
     class Meta(AbstractUser.Meta):
         swappable = 'AUTH_USER_MODEL'
 
@@ -16,3 +18,16 @@ class Trooper(AbstractUser):
         keys = urllib.urlencode(keys)
         return "https://www.gravatar.com/avatar/{hash}?{query}".format(hash=email_hash,
                                                                        query=keys)
+
+    @cached_property
+    def recently_created_tasks(self):
+        return self.task_set.all()
+
+    @cached_property
+    def recently_answered_tasks(self):
+        answer_ids = self.recent_answers.values_list('id', flat=True)
+        return self.task_set.filter(id__in=answer_ids).distinct()
+
+    @cached_property
+    def recent_answers(self):
+        return self.answer_set.all().prefetch_related('question__task')

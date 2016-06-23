@@ -30,36 +30,72 @@
         </div>
       </div>
       <div class="column is-6">
+        <div class="box">
+          <nav class="level">
+            {% if trooper.is_superuser %}
+            <div class="level-item has-text-centered">
+              <p class="heading">Tasks created</p>
+              <p class="title">{{ trooper.recently_created_tasks.count|intcomma }}</p>
+            </div>
+            {% endif %}
+            <div class="level-item has-text-centered">
+              <p class="heading">Tasks participated</p>
+              <p class="title">{{ trooper.recently_answered_tasks.count|intcomma }}</p>
+            </div>
+            <div class="level-item has-text-centered">
+              <p class="heading">Answers</p>
+              <p class="title">{{ trooper.recent_answers.count|intcomma }}</p>
+            </div>
+          </nav>
+        </div>
         <div class="columns">
           <div class="column is-6">
             {% if trooper.is_superuser %}
             <nav class="panel">
               <div class="panel-heading">Tasks created</div>
+              {% for task in trooper.recently_created_tasks|slice:":10" %}
+              <div class="panel-block">
+                <a href="{{ task.get_absolute_url }}">{{ task }}</a>
+              </div>
+              {% empty %}
               <div class="panel-block">
                 <div class="notification is-warning">
                   <i class="fa fa-warning"></i> No tasks created.
                 </div>
               </div>
+              {% endfor %}
             </nav>
             {% else %}
             <nav class="panel">
               <div class="panel-heading">Recent tasks</div>
+              {% for task in trooper.recently_answered_tasks|slice:":10" %}
+              <div class="panel-block">
+                <a href="{{ task.get_absolute_url }}">{{ task }}</a>
+              </div>
+              {% empty %}
               <div class="panel-block">
                 <div class="notification is-warning">
-                  <i class="fa fa-warning"></i> No recent tasks.
+                  <i class="fa fa-warning"></i> No tasks created.
                 </div>
               </div>
+              {% endfor %}
             </nav>
             {% endif %}
           </div>
           <div class="column is-6">
             <nav class="panel">
               <div class="panel-heading">Recent answers</div>
+              {% for answer in trooper.recent_answers|slice:":10" %}
+              <div class="panel-block">
+                {{ answer.question.task }} <i class="fa fa-arrow-right"></i> {{ answer }}
+              </div>
+              {% empty %}
               <div class="panel-block">
                 <div class="notification is-warning">
                   <i class="fa fa-warning"></i> No recent answers.
                 </div>
               </div>
+              {% endfor %}
             </nav>
           </div>
         </div>
