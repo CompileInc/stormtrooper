@@ -25,8 +25,9 @@ class Trooper(AbstractUser):
 
     @cached_property
     def recently_answered_tasks(self):
+        from tasker.models import Task
         answer_ids = self.recent_answers.values_list('id', flat=True)
-        return self.task_set.filter(id__in=answer_ids).distinct()
+        return Task.objects.filter(id__in=answer_ids).distinct()
 
     @cached_property
     def recent_answers(self):
