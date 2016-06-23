@@ -29,7 +29,7 @@ def tasker_export_send(message):
         _result = send_html_email(to_addr, **mail_dict)
         LOG.info("sent mail")
     else:
-        LOG.eror("Could not create CSV for export-id {}".format(export.pk))
+        LOG.error("Could not create CSV for export-id {}".format(export.pk))
 
 
 def tasker_export_create(message):
