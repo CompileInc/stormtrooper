@@ -148,7 +148,7 @@ class Task(models.Model):
         if user:
             answered_qs = Answer.objects.filter(question__in=questions,
                                                 answered_by=user)\
-                                        .values_list('question__id', flat=True)
+                                        .values_list('question__slug', flat=True)
             answered_qs = list(answered_qs)
             if exclude:
                 answered_qs.append(exclude)
