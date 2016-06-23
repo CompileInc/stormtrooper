@@ -1,1 +1,1 @@
-your csv export
+Your export for the task {{ task_title|truncatechars:50 }} is ready.

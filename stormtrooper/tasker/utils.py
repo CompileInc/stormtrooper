@@ -20,7 +20,8 @@ def send_html_email(to_addr, **kwargs):
     data_dict = kwargs['data_dict']
     subject_template = kwargs['subject_template']
     email_template = kwargs['email_template']
-    subject = remove_newlines(render_to_string(subject_template, data_dict))
+    email_tag = settings.EMAIL_TAG
+    subject = "{} {}".format(email_tag, remove_newlines(render_to_string(subject_template, data_dict)))
     html_body = render_to_string(email_template, data_dict)
     text_body = html2text.html2text(html_body)
     send_mail(subject=subject,

@@ -138,6 +138,7 @@ STATIC_URL = '/static/'
 # email conf
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = 'notifications@example.com'
+EMAIL_TAG = "[Stormtrooper]"
 
 CHANNEL_LAYERS = {
     "default": {

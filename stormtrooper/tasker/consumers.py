@@ -20,7 +20,8 @@ def tasker_export_send(message):
         attachment = export.export_file.url
         data_dict = {'username': user.username,
                      'email': user.email,
-                     'export_link': attachment}
+                     'export_link': attachment,
+                     'task_title': export.task.title}
         subject_template = 'email/export_subject.txt'
         email_template = 'email/export_email.html'
         mail_dict = {'data_dict': data_dict,
