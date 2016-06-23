@@ -18,13 +18,15 @@
           {% elif task.is_active %}
           <span class="tag is-success">ACTIVE</span>
           {% endif %}</h1>
-        <small>{{ task.created_on }} • {{ task.created_by.first_name }}</small>
+        <small>{{ task.created_on }} • <a href="{% url 'accounts-profile' username=task.created_by.username }}">{{ task.created_by.first_name }}</a></small>
       </div>
     </div>
     <div class="columns">
       <div class="column is-8 is-offset-2">
         {% if progress > 0 or question %}
-        <progress class="progress is-success" value="{{ progress }}" max="100" title="Progress {{ progress|intcomma }}%">{{ progress }}%</progress>
+        <div class="hint--top is-block" aria-label="Progress {{ progress|intcomma }}%">
+          <progress class="progress is-success" value="{{ progress }}" max="100" title="Progress {{ progress|intcomma }}%">{{ progress }}%</progress>
+        </div>
         {% endif %}
         {% if task.description %}
         <div class="box">
