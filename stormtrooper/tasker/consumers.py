@@ -1,6 +1,6 @@
 
 from .models import Task, Export
-from .utils import send_email_with_attachment
+from .utils import send_html_email
 from channels import Channel
 import logging
 
@@ -17,15 +17,16 @@ def tasker_export_send(message):
     if export.status == Export.SUCCESS:
         user = export.created_by
         to_addr = [user.email]
-        attachment = export.export_file.file.name
+        attachment = export.export_file.url
         data_dict = {'username': user.username,
-                     'email': user.email}
+                     'email': user.email,
+                     'export_link': attachment}
         subject_template = 'email/export_subject.txt'
-        email_template = 'email/export_email.txt'
+        email_template = 'email/export_email.html'
         mail_dict = {'data_dict': data_dict,
                      'subject_template': subject_template,
                      'email_template': email_template}
-        _result = send_email_with_attachment(to_addr, attachment, **mail_dict)
+        _result = send_html_email(to_addr, **mail_dict)
         LOG.info("sent mail")
     else:
         LOG.eror("Could not create CSV for export-id {}".format(export.pk))

@@ -12,3 +12,4 @@ pytz==2016.4
 tldextract==2.0.1
 unicodecsv==0.14.1
 raven==5.20.0
+html2text==2016.5.29
