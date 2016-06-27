@@ -20,6 +20,8 @@ from stormtrooper.views import home as home_view
 
 urlpatterns = [
     url(r'^$', home_view, name='home'),
+    url(r'^jet/', include('jet.urls', 'jet')),  # Django JET URLS
+    url(r'^jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^tasks/', include('tasker.urls')),
     url(r'^accounts/', include('login.urls')),

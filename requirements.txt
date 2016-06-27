@@ -4,6 +4,7 @@ channels==0.14.0
 Django>=1.9,<1.10
 django-compressor==2.0
 django-el-pagination==2.1.2
+django-jet==0.1.4
 django-settings-export==1.1.0
 django-storages==1.4.1
 psycopg2==2.6.1
