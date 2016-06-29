@@ -1,0 +1,28 @@
+{% extends "stormtrooper/base.html" %}
+{% load static %}
+
+{% block nav_bar %}{% endblock nav_bar %}
+{% block footer %}{% endblock footer %}
+
+{% block content %}
+<section class="hero is-primary is-fullheight is-bold">
+  <div class="hero-body">
+    <div class="container">
+      <div class="columns">
+        <div class="column is-4 is-offset-2">
+          <img src="{% static 'images/favicon-96x96.png' %}" />
+          <h1 class="title is-1">
+            Stormtrooper
+          </h1>
+          <h2 class="subtitle is-5">
+            Tasks with human intelligence
+          </h2>
+        </div>
+        <div class="column is-4">
+          {% include "login/_login.html" %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}
