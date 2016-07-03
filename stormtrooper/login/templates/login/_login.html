@@ -1,7 +1,8 @@
 <div class="box has-text-centered login">
   <h1 class="title">Login</h1>
   <hr />
-  <a class="button is-large is-danger is-outlined" href="{% url 'social:begin' 'google-oauth2' %}">
+  <a class="button is-large is-danger is-outlined"
+    onclick="window.open('{% url 'social:begin' 'google-oauth2' %}', '_blank', 'location=yes,height=570,width=520,scrollbars=yes,status=yes');">
     <span class="icon">
       <i class="fa fa-google-plus-square"></i>
     </span>

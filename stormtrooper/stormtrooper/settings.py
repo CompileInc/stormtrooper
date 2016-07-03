@@ -128,7 +128,7 @@ AUTH_USER_MODEL = 'login.Trooper'
 # Python social auth settings
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = 'my-google-key'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'my-google-secret'
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/tasks'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/accounts/login/js/success/'
 SOCIAL_AUTH_USER_MODEL = AUTH_USER_MODEL
 SOCIAL_AUTH_LOGIN_URL = '/accounts/login/'
 LOGIN_ERROR_URL = '/accounts/login/'

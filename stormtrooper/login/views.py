@@ -22,3 +22,7 @@ class TrooperView(DetailView):
     slug_field = 'username'
     slug_url_kwarg = 'username'
     model = Trooper
+
+
+class SocialLoginPopUp(TemplateView):
+    template_name = "login/login_popup_return.html"

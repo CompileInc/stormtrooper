@@ -9,8 +9,8 @@
   <div class="hero-body">
     <div class="container">
       <div class="columns">
-        <div class="column is-4 is-offset-2">
-          <img src="{% static 'images/favicon-96x96.png' %}" />
+        <div class="column is-5 is-offset-2">
+          <a href="{% url 'home' %}"><img src="{% static 'images/favicon-96x96.png' %}" /></a>
           <h1 class="title is-1">
             Stormtrooper
           </h1>
@@ -18,7 +18,7 @@
             Tasks with human intelligence
           </h2>
         </div>
-        <div class="column is-4">
+        <div class="column is-3">
           {% block message %}{% endblock message %}
           {% include "login/_login.html" %}
         </div>
