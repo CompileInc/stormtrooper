@@ -2,6 +2,10 @@
 {% load humanize el_pagination_tags urlize %}
 {% load addcss %}
 
+{% block extra_css %}
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/Selectivity.js/2.1.0/selectivity-full.min.css">
+{% endblock extra_css %}
+
 {% block task_content %}
     <div class="columns">
       <div class="column is-8 is-offset-2">
@@ -67,3 +71,10 @@
       </div>
     </div>
 {% endblock %}
+
+{% block extra_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Selectivity.js/2.1.0/selectivity-full.min.js"></script>
+<script type="text/javascript">
+  $("select#id_answer").selectivity();
+</script>
+{% endblock extra_js %}

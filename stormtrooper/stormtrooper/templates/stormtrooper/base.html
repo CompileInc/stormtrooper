@@ -68,6 +68,9 @@
             -webkit-filter: drop-shadow(0 1px 1px rgba(0,0,0,.15));
             filter: drop-shadow(0 1px 1px rgba(0,0,0,.15));
           }
+          .selectivity-result-item.highlight {
+            margin: 0!important;
+          }
         </style>
         {% endcompress css %}
         {% endblock css %}
@@ -139,7 +142,7 @@
     </div>
     {% endblock footer %}
     {% block js %}
-    <script src="//cdnjs.cloudflare.com/ajax/libs/cash/1.3.0/cash.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/zepto/1.1.6/zepto.min.js"></script>
     {% compress js %}
     <script type="text/javascript">
       $(function(){
