@@ -17,12 +17,14 @@ class ChoiceAnswerForm(forms.Form):
         if task:
             qs = task.choices
             widget = forms.RadioSelect
+            empty_label = None
             count = task.no_of_choices
             if count > 6:
                 widget = forms.Select
+                empty_label = "---"
             self.fields['answer'] = forms.ModelChoiceField(queryset=qs,
                                                            widget=widget,
-                                                           empty_label=None)
+                                                           empty_label=empty_label)
 
 
 class ExportForm(forms.ModelForm):
