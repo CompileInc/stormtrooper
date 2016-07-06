@@ -16,8 +16,12 @@ class ChoiceAnswerForm(forms.Form):
         super(ChoiceAnswerForm, self).__init__(*args, **kwargs)
         if task:
             qs = task.choices
+            widget = forms.RadioSelect
+            count = task.no_of_choices
+            if count > 6:
+                widget = forms.Select
             self.fields['answer'] = forms.ModelChoiceField(queryset=qs,
-                                                           widget=forms.RadioSelect,
+                                                           widget=widget,
                                                            empty_label=None)
 
 

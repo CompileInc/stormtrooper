@@ -107,6 +107,10 @@ class Task(models.Model):
     def choices(self):
         return self.choice_set.all()
 
+    @cached_property
+    def no_of_choices(self):
+        return self.choice_set.all().count()
+
     def answered(self, user=None):
         questions = self.questions
         base_qs = Answer.objects.filter(question__in=questions)
