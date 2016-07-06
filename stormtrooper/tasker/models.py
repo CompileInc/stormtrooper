@@ -171,7 +171,7 @@ class Task(models.Model):
 
 class Choice(models.Model):
     task = models.ForeignKey(Task)
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=120)
 
     def __unicode__(self):
         return self.name
