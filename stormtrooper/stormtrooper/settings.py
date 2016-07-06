@@ -160,6 +160,8 @@ STATICFILES_FINDERS = STATICFILES_FINDERS + ['compressor.finders.CompressorFinde
 
 DEFAULT_AVATAR = 'retro'
 
+TASK_CHOICE_SELECT_CUTOFF = 5
+
 try:
     from local_settings import *
 except ImportError:
