@@ -1,6 +1,7 @@
 import logging
 
 from django.contrib import messages
+from django.db.models import Q
 from django.http.response import Http404, HttpResponseRedirect
 from django.utils.encoding import force_text
 from django.views.generic import View
@@ -23,7 +24,9 @@ class TaskListView(ListView):
         if self.request.user.is_superuser:
             return self.model.objects.all_active()
         elif self.model.objects.filter(created_by=self.request.user).exists():
-            return self.model.objects.all_active().filter(created_by=self.request.user)
+            return self.model.objects.all_active()\
+                       .filter(Q(created_by=self.request.user) |
+                               Q(is_closed=False))
         else:
             return self.model.objects.active()
 
