@@ -53,25 +53,27 @@
     <div class="box">
       <h3 class="title">Questions</h3>
       <hr />
-      <table class="table is-striped">
-        <thead>
-          <tr>
-            {% for k in task.question_template %}
-            <th> {{ k }}</th>
+      <div class="table-overflow-scroll">
+        <table class="table is-striped">
+          <thead>
+            <tr>
+              {% for k in task.question_template %}
+              <th> {{ k }}</th>
+              {% endfor %}
+            </tr>
+          </thead>
+          <tbody>
+            {% paginate task.questions as questions %}
+            {% for q in questions %}
+            <tr>
+              {% for k, qi in q.question.items %}
+              <td>{{ qi|urlize_target_blank }}</td>
+              {% endfor %}
+            </tr>
             {% endfor %}
-          </tr>
-        </thead>
-        <tbody>
-          {% paginate task.questions as questions %}
-          {% for q in questions %}
-          <tr>
-            {% for k, qi in q.question.items %}
-            <td>{{ qi|urlize_target_blank }}</td>
-            {% endfor %}
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      </div>
       {% show_pages %}
     </div>
   </div>
