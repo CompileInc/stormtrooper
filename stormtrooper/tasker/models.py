@@ -46,7 +46,7 @@ class Task(models.Model):
 
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
-    csv = models.FileField(upload_to='tasks/%Y/%m/%d/')
+    csv = models.FileField(upload_to='tasks/%Y/%m/%d/%H%M%S%f/')
     answer_label = models.CharField(max_length=30, default="Answer")
 
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL)
@@ -61,6 +61,9 @@ class Task(models.Model):
     answer_plugin = models.CharField(max_length=5, blank=True, null=True)
 
     objects = TaskQuerySet.as_manager()
+
+    class Meta:
+        ordering = ['-created_on']
 
     def __unicode__(self):
         return self.title
@@ -269,7 +272,7 @@ class Export(models.Model):
 
     task = models.ForeignKey(Task)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL)
-    export_file = models.FileField(upload_to='exports/%Y/%m/%d/', blank=True, null=True)
+    export_file = models.FileField(upload_to='exports/%Y/%m/%d/%H%M%S%f/', blank=True, null=True)
     status = models.CharField(max_length=2, choices=STATUS_CHOICES, default=PROCESSING)
     created_on = models.DateTimeField(auto_now_add=True)
 

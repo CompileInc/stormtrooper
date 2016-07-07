@@ -6,7 +6,12 @@
   <div class="container">
     <div class="columns">
       <div class="column is-2 is-offset-2">
-        <div class="control">{% include "login/profile_pic.html" with user=trooper size="200" %}</div>
+        <div class="control">
+          {% include "login/profile_pic.html" with user=trooper size="200" %}
+          {% if trooper == request.user %}
+          <span class="help">Update your profile pic at <a href="//gravatar.com" target="_blank">gravatar.com</a></span>
+          {% endif %}
+        </div>
         <div class="subtitle is-5 is-marginless">
           {{ trooper.get_full_name }}
         </div>
