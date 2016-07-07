@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^tasks/', include('tasker.urls')),
     url(r'^accounts/', include('login.urls')),
+    url(r'^tz_detect/', include('tz_detect.urls')),
 ]
 
 if settings.DEBUG:

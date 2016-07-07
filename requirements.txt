@@ -7,6 +7,7 @@ django-el-pagination==2.1.2
 django-jet==0.1.4
 django-settings-export==1.1.0
 django-storages==1.4.1
+django-tz-detect==0.2.7
 psycopg2==2.6.1
 python-social-auth==0.2.19
 pytz==2016.4

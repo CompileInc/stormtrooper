@@ -51,6 +51,7 @@ INSTALLED_APPS = (
     'compressor',
     'el_pagination',
     'channels',
+    'tz_detect',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -63,6 +64,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
+    'tz_detect.middleware.TimezoneMiddleware',
 )
 
 AUTHENTICATION_BACKENDS = (

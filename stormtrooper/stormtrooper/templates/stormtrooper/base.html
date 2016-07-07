@@ -1,4 +1,4 @@
-{% load static compress %}{% spaceless %}<!doctype html>
+{% load static compress tz_detect %}{% spaceless %}<!doctype html>
 <html class="no-js" lang="">
     <head>
         <meta charset="utf-8">
@@ -159,6 +159,9 @@
       });
     </script>
     {% endcompress js %}
+
+    {% tz_detect %}
+
     {% endblock js %}
 
     {% block extra_js %}
