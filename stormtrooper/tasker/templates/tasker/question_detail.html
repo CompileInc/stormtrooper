@@ -10,63 +10,65 @@
     <div class="columns">
       <div class="column is-8 is-offset-2">
         <div class="box">
+          <div class="table-overflow-scroll">
             <table class="table is-striped">
-                <thead>
-                    <tr>
-                        <th> Desciption </th>
-                        <th> Value </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for k,v in question.question.items %}
-                    <tr>
-                        <td>{{ k }}</td>
-                        <td>{{ v|urlize_target_blank }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
+              <thead>
+                <tr>
+                  <th>Desciption</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for k,v in question.question.items %}
+                <tr>
+                  <td>{{ k }}</td>
+                  <td>{{ v|urlize_target_blank }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
             </table>
+          </div>
         </div>
         <div class="box">
-            <form action="{{ question.get_absolute_url }}" method="post">
-              {% csrf_token %}
-              <label class="label">{{ form.answer.label_tag }}</label>
-              <p class="control{% if form.answer.errors %} has-icon has-icon-right{% endif %}">
-                {% if task.is_multiple_choice %}
-                {% if form.answer.errors %}
-                <i class="fa fa-warning"></i>
-                {% for error in form.answer.errors %}<span class="help is-danger">{{ error|escape }}</span>{% endfor %}
-                {% endif %}
-                <ul class="control">
-                  {% for choice in form.answer %}
-                  <li>
-                    <label class="radio">
-                      {{ choice }}
-                    </label>
-                  </li>
-                  {% endfor %}
-                </ul>
-                {% else %}
-                {% if form.answer.errors %}
-                {{ form.answer|addcss:"input is-danger" }}
-                <i class="fa fa-warning"></i>
-                {% for error in form.answer.errors %}<span class="help is-danger">{{ error|escape }}</span>{% endfor %}
-                {% else %}
-                {{ form.answer|addcss:"input" }}
-                {% endif %}
-              </p>
+          <form action="{{ question.get_absolute_url }}" method="post">
+            {% csrf_token %}
+            <label class="label">{{ form.answer.label_tag }}</label>
+            <p class="control{% if form.answer.errors %} has-icon has-icon-right{% endif %}">
+              {% if task.is_multiple_choice %}
+              {% if form.answer.errors %}
+              <i class="fa fa-warning"></i>
+              {% for error in form.answer.errors %}<span class="help is-danger">{{ error|escape }}</span>{% endfor %}
               {% endif %}
-              <div class="control is-horizontal">
-                <div class="control is-grouped">
-                  <p class="control">
-                    <button class="button is-primary">Submit</button>
-                  </p>
-                  <p class="control">
-                    <a class="button is-light" href="{% url 'task-play' task.id %}?exclude={{ question.slug }}">Skip</a>
-                  </p>
-                </div>
+              <ul class="control">
+                {% for choice in form.answer %}
+                <li>
+                  <label class="radio">
+                    {{ choice }}
+                  </label>
+                </li>
+                {% endfor %}
+              </ul>
+              {% else %}
+              {% if form.answer.errors %}
+              {{ form.answer|addcss:"input is-danger" }}
+              <i class="fa fa-warning"></i>
+              {% for error in form.answer.errors %}<span class="help is-danger">{{ error|escape }}</span>{% endfor %}
+              {% else %}
+              {{ form.answer|addcss:"input" }}
+              {% endif %}
+            </p>
+            {% endif %}
+            <div class="control is-horizontal">
+              <div class="control is-grouped">
+                <p class="control">
+                  <button class="button is-primary">Submit</button>
+                </p>
+                <p class="control">
+                  <a class="button is-light" href="{% url 'task-play' task.id %}?exclude={{ question.slug }}">Skip</a>
+                </p>
               </div>
-            </form>
+            </div>
+          </form>
         </div>
       </div>
     </div>

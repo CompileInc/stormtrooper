@@ -13,6 +13,6 @@ class WebsiteTLD(Plugin):
         _answers = []
         for answer in answers:
             tld = tldextract.extract(answer)
-            domain = "%s.%s" % (tld.domain, tld.suffix)
+            domain = "%s.%s" % (tld.domain, tld.suffix) if tld.suffix is not '' else ''
             _answers.append(domain)
         return _answers
