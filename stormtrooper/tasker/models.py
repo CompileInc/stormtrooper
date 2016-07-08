@@ -276,6 +276,9 @@ class Export(models.Model):
     status = models.CharField(max_length=2, choices=STATUS_CHOICES, default=PROCESSING)
     created_on = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ['-created_on']
+
     def __unicode__(self):
         return unicode(self.task)
 
