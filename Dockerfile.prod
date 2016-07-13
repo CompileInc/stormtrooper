@@ -13,5 +13,6 @@ COPY deploy/supervisor/supervisord_dev.conf /etc/supervisor/supervisord.conf
 RUN mkdir -p $APPLICATION_ROOT
 WORKDIR $APPLICATION_ROOT
 ADD requirements.txt $APPLICATION_ROOT
-RUN pip install -r requirements.txt
+ADD requirements-dev.txt $APPLICATION_ROOT
+RUN pip install -r requirements-dev.txt
 ADD . $APPLICATION_ROOT

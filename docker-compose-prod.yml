@@ -1,0 +1,22 @@
+web:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    command: bash -c "python /stormtrooper/stormtrooper/manage.py migrate && supervisord"
+    volumes:
+        - .:/stormtrooper
+    ports:
+        - "8000:8000"
+    links:
+        - db
+        - redis
+
+db:
+    image: postgres:9.5
+    environment:
+        POSTGRES_PASSWORD: postgres
+
+redis:
+    image: redis:latest
+    ports:
+        - "6379"
