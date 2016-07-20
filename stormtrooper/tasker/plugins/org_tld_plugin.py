@@ -12,7 +12,10 @@ class WebsiteTLD(Plugin):
         import tldextract
         _answers = []
         for answer in answers:
-            tld = tldextract.extract(answer)
-            domain = "%s.%s" % (tld.domain, tld.suffix) if tld.suffix is not '' else ''
+            try:
+                tld = tldextract.extract(answer.decode('utf-8'))
+                domain = u'%s.%s' % (tld.domain, tld.suffix) if tld.suffix is not '' else ''
+            except Exception as e:
+                domain = ''
             _answers.append(domain)
         return _answers
