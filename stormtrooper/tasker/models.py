@@ -164,7 +164,8 @@ class Task(models.Model):
         if user:
             answered_qs = Answer.objects.filter(question__in=questions,
                                                 answered_by=user)\
-                                        .values_list('question__slug', flat=True)
+                                        .values_list('question__slug',
+                                                     flat=True)
             answered_qs = list(answered_qs)
             if exclude:
                 answered_qs.append(exclude)
@@ -283,12 +284,16 @@ class Export(models.Model):
     PROCESSING = 'PS'
     FAILURE = 'FR'
     SUCCESS = 'SS'
-    STATUS_CHOICES = ((PROCESSING, "Processing"), (FAILURE, "Failure"), (SUCCESS, "Success"))
+    STATUS_CHOICES = ((PROCESSING, "Processing"),
+                      (FAILURE, "Failure"),
+                      (SUCCESS, "Success"))
 
     task = models.ForeignKey(Task)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL)
-    export_file = models.FileField(upload_to='exports/%Y/%m/%d/%H%M%S%f/', blank=True, null=True)
-    status = models.CharField(max_length=2, choices=STATUS_CHOICES, default=PROCESSING)
+    export_file = models.FileField(upload_to='exports/%Y/%m/%d/%H%M%S%f/',
+                                   blank=True, null=True)
+    status = models.CharField(max_length=2, choices=STATUS_CHOICES,
+                              default=PROCESSING)
     created_on = models.DateTimeField(auto_now_add=True)
 
     class Meta:

@@ -12,13 +12,31 @@
         </h1>
       </div>
       <div class="column is-8">
-        <h1 class="title">{{ task.title }}
-          {% if task.is_closed %}
-          <span class="tag is-danger">CLOSED</span>
-          {% elif task.is_active %}
-          <span class="tag is-success">ACTIVE</span>
-          {% endif %}</h1>
-        <small>{{ task.created_on }} • <a href="{% url 'accounts-profile' username=task.created_by.username %}">{{ task.created_by.first_name }}</a></small>
+        <div class="level">
+          <div class="level-left">
+            <div class="level-item">
+              <h1 class="title">{{ task.title }}
+                {% if task.is_closed %}
+                <span class="tag is-danger">CLOSED</span>
+                {% elif task.is_active %}
+                <span class="tag is-success">ACTIVE</span>
+                {% endif %}</h1>
+                <small>{{ task.created_on }} • <a href="{% url 'accounts-profile' username=task.created_by.username %}">{{ task.created_by.first_name }}</a></small>
+            </div>
+          </div>
+          {% if request.user.is_superuser or request.user.is_staff %}
+          <div class="level-right">
+            <p class="level-item hint--top" aria-label="Edit Task">
+              <a class="button is-success is-outlined" href="{% url 'admin:tasker_task_change' task.id %}">
+                <span class="icon is-small">
+                  <i class="fa fa-pencil"></i>
+                </span>
+                <span>Edit</span>
+              </a>
+            </p>
+          </div>
+          {% endif %}
+        </div>
       </div>
     </div>
     <div class="columns">

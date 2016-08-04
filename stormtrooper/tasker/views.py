@@ -109,6 +109,11 @@ class QuestionDetailView(DetailView, FormMixin, ProcessFormView):
         if self.object:
             return force_text(self.object.task.get_task_play_url())
 
+    def get_queryset(self):
+        queryset = super(QuestionDetailView, self).get_queryset()
+        return queryset.select_related('task')\
+                       .prefetch_related('task__choice_set')
+
     def get_form(self, form_class=None):
         # TODO: notify if question has already been answered
         self.object = self.get_object()
