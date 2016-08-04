@@ -162,11 +162,7 @@ class Task(models.Model):
         '''
         questions = self.questions
         if user:
-            answered_qs = Answer.objects.filter(question__in=questions,
-                                                answered_by=user)\
-                                        .values_list('question__slug',
-                                                     flat=True)
-            questions = questions.exclude(slug__in=answered_qs)
+            questions = questions.exclude(answer__answered_by=user)
             if exclude:
                 questions = questions.exclude(slug=exclude)
 
