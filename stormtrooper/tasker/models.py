@@ -166,10 +166,10 @@ class Task(models.Model):
                                                 answered_by=user)\
                                         .values_list('question__slug',
                                                      flat=True)
-            answered_qs = list(answered_qs)
-            if exclude:
-                answered_qs.append(exclude)
             questions = questions.exclude(slug__in=answered_qs)
+            if exclude:
+                questions = questions.exclude(slug=exclude)
+
         return questions.order_by('?').first()
 
     @property
