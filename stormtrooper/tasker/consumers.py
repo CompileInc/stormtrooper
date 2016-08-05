@@ -1,5 +1,5 @@
 
-from .models import Task, Export
+from .models import Task, Answer, Export
 from .utils import send_html_email
 from channels import Channel
 import logging
@@ -10,6 +10,17 @@ LOG = logging.getLogger(__name__)
 def tasker_questions_create(message):
     task = Task.objects.get(id=message['task_id'])
     task.process(activate=True)
+
+
+def tasker_answer_create(message):
+    question_id = message['question_id']
+    answer = message['answer']
+    user_id = message['user_id']
+    defaults = {'answer': answer}
+    _ans, _created = Answer.objects.get_or_create(question_id=question_id,
+                                                  answered_by_id=user_id,
+                                                  defaults=defaults)
+    LOG.info('Answer by user_id: %d recorded', user_id)
 
 
 def tasker_export_send(message):

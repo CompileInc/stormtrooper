@@ -9,6 +9,7 @@ from django.views.generic.base import ContextMixin
 from django.views.generic.detail import DetailView, SingleObjectMixin
 from django.views.generic.edit import FormMixin, ProcessFormView, CreateView
 from django.views.generic.list import ListView
+from channels import Channel
 
 from tasker.forms import TextAnswerForm, ChoiceAnswerForm, ExportForm
 from tasker.models import Task, Question, Answer, Export
@@ -146,8 +147,8 @@ class QuestionDetailView(DetailView, FormMixin, ProcessFormView):
                           'verbose': choice_verbose}
             else:
                 answer = {'verbose': data.get('answer')}
-            defaults = {'answer': answer}
-            _ans_obj, _created = Answer.objects.get_or_create(question=self.object,
-                                                              answered_by=user,
-                                                              defaults=defaults)
+            message = {'user_id': user.pk,
+                       'question_id': self.object.pk,
+                       'answer': answer}
+            Channel('tasker-answer-create').send(message)
         return super(QuestionDetailView, self).form_valid(form)
