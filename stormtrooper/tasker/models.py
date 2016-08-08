@@ -19,12 +19,26 @@ from django.utils.functional import cached_property
 from django.core.urlresolvers import reverse
 
 from channels import Channel
+from el_pagination.paginators import BasePaginator
 import unicodecsv as csv
 
 from .plugins import initialize_plugins, get_plugin
 
 
 initialize_plugins()
+
+# Remove me when el_pagination has proper support for 1.10
+
+
+def basepaginator__init__(self, object_list, per_page, **kwargs):
+    # Hack to support django 1.10 in django-el-pagination
+    self._num_pages = None
+    if 'first_page' in kwargs:
+        self.first_page = kwargs.pop('first_page')
+    else:
+        self.first_page = per_page
+    super(BasePaginator, self).__init__(object_list, per_page, **kwargs)
+BasePaginator.__init__ = basepaginator__init__
 
 
 class TaskQuerySet(models.QuerySet):
@@ -54,6 +68,7 @@ class Task(models.Model):
 
     is_active = models.BooleanField(default=False)
     is_closed = models.BooleanField(default=False)
+    is_multiple_choice = models.BooleanField(default=False)
     is_questions_created = models.BooleanField(default=False)
     is_best_of = models.BooleanField(default=False,
                                      help_text="Check this if you want to run best-of-n. Default: max-of-n")
@@ -126,12 +141,6 @@ class Task(models.Model):
             return floor(self.answered(user=user) / self.no_of_questions * 100)
         return None
 
-    @cached_property
-    def is_multiple_choice(self):
-        if len(self.choices) > 0:
-            return True
-        return False
-
     @transaction.atomic
     def process(self, activate=False):
         if not self.is_questions_created:
@@ -153,13 +162,10 @@ class Task(models.Model):
         '''
         questions = self.questions
         if user:
-            answered_qs = Answer.objects.filter(question__in=questions,
-                                                answered_by=user)\
-                                        .values_list('question__slug', flat=True)
-            answered_qs = list(answered_qs)
+            questions = questions.exclude(answer__answered_by=user)
             if exclude:
-                answered_qs.append(exclude)
-            questions = questions.exclude(slug__in=answered_qs)
+                questions = questions.exclude(slug=exclude)
+
         return questions.order_by('?').first()
 
     @property
@@ -170,6 +176,12 @@ class Task(models.Model):
             row.update(question.answer)
             answers.append(row)
         return answers
+
+    def save(self, *args, **kwargs):
+        if len(self.choices) > 0:
+            self.is_multiple_choice = True
+        self.is_multiple_choice = True
+        return super(Task, self).save(*args, **kwargs)
 
 
 class Choice(models.Model):
@@ -268,12 +280,16 @@ class Export(models.Model):
     PROCESSING = 'PS'
     FAILURE = 'FR'
     SUCCESS = 'SS'
-    STATUS_CHOICES = ((PROCESSING, "Processing"), (FAILURE, "Failure"), (SUCCESS, "Success"))
+    STATUS_CHOICES = ((PROCESSING, "Processing"),
+                      (FAILURE, "Failure"),
+                      (SUCCESS, "Success"))
 
     task = models.ForeignKey(Task)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL)
-    export_file = models.FileField(upload_to='exports/%Y/%m/%d/%H%M%S%f/', blank=True, null=True)
-    status = models.CharField(max_length=2, choices=STATUS_CHOICES, default=PROCESSING)
+    export_file = models.FileField(upload_to='exports/%Y/%m/%d/%H%M%S%f/',
+                                   blank=True, null=True)
+    status = models.CharField(max_length=2, choices=STATUS_CHOICES,
+                              default=PROCESSING)
     created_on = models.DateTimeField(auto_now_add=True)
 
     class Meta:
