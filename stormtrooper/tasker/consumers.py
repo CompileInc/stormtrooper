@@ -20,7 +20,6 @@ def tasker_answer_create(message):
     _ans, _created = Answer.objects.get_or_create(question_id=question_id,
                                                   answered_by_id=user_id,
                                                   defaults=defaults)
-    LOG.info('Answer by user_id: %d recorded', user_id)
 
 
 def tasker_export_send(message):
