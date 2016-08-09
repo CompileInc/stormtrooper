@@ -180,7 +180,6 @@ class Task(models.Model):
     def save(self, *args, **kwargs):
         if len(self.choices) > 0:
             self.is_multiple_choice = True
-        self.is_multiple_choice = True
         return super(Task, self).save(*args, **kwargs)
 
 
