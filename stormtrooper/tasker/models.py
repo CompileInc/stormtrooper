@@ -266,7 +266,7 @@ class Answer(models.Model):
                 answer = unicode(Choice.objects.get(task=self.question.task,
                                                     id=int(choice_id)))
             else:
-                answer = self.answer['verbose']
+                answer = self.cleaned_answer()
         except AttributeError:
             pass
         return answer
@@ -274,6 +274,14 @@ class Answer(models.Model):
     @property
     def data(self):
         return {"ST_USER_%s_ANSWER" % (self.answered_by.username): str(self)}
+
+    def cleaned_answer(self):
+        choice_id = self.answer.get("choice_id")
+        if not choice_id or choice_id in EMPTY_VALUES:
+            answer = self.answer['verbose']
+            # remove multiple spaces
+            return ' '.join(answer.split())
+        return str(self)
 
 
 class Export(models.Model):
