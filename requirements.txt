@@ -2,7 +2,7 @@ asgi-redis==0.13.0
 boto==2.40.0
 channels==0.14.0
 Django==1.10
-django-compressor==2.0
+-e git+https://github.com/django-compressor/django-compressor.git@6b62725441c8df1812748b8b873583dce917abf4#egg=django_compressor
 django-el-pagination==2.1.2
 django-settings-export==1.1.0
 django-storages==1.4.1
