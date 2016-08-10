@@ -216,14 +216,13 @@ class Question(models.Model):
         votes = None
         if self.task.answer_plugin:
             answers = get_plugin(self.task.answer_plugin).process(answers)
-
         if len(answers) < Task.MIN_TO_ANSWER:
             answer = ""
         else:
             most_common = Counter(answers).most_common(1)[0]
             votes = most_common[1]
             if is_best_of:
-                cutoff = max(len(answers) / 2 + 1, Task.MIN_TO_ANSWER)
+                cutoff = max(len(answers) // 2 + 1, Task.MIN_TO_ANSWER)
                 if votes >= cutoff:
                     answer = most_common[0]
                 else:
