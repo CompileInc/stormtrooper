@@ -249,6 +249,7 @@ class Answer(models.Model):
     answer = JSONField(default=dict({'choice_id': None,
                                      'verbose': 'Default Answer'}))
     answered_by = models.ForeignKey(settings.AUTH_USER_MODEL)
+    created_on = models.DateTimeField(auto_now_add=True)
 
     '''Use this field in future to mark if this answer was chosen.'''
     # is_voted_answer = models.BooleanField(default=False)
