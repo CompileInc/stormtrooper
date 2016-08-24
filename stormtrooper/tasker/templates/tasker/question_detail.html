@@ -32,7 +32,7 @@
         <div class="box">
           <form action="{{ question.get_absolute_url }}" method="post">
             {% csrf_token %}
-            <label class="label">{{ form.answer.label_tag }}</label>
+            <label class="label">{{ task.answer_label }}</label>
             <p class="control{% if form.answer.errors %} has-icon has-icon-right{% endif %}">
               {% if task.is_multiple_choice %}
               {% if form.answer.errors %}
