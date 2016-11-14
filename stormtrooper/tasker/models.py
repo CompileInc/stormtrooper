@@ -160,9 +160,14 @@ class Task(models.Model):
         Responds with a random un-answered question for that user
         if user is None, returns a random question.
         '''
+        from .models import Answer
+
         questions = self.questions
         if user:
-            questions = questions.exclude(answer__answered_by=user)
+            answered = Answer.objects.filter(question__in=questions.values_list('id', flat=True),
+                                            answered_by=user)\
+                                    .values_list('question_id', flat=True)
+            questions = questions.exclude(id__in=answered)
             if exclude:
                 questions = questions.exclude(slug=exclude)
 
