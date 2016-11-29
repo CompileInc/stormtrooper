@@ -32,7 +32,7 @@ class WebsiteTLDSub(Plugin):
         from django.core.validators import EMPTY_VALUES
         _answers = []
         for answer in answers:
-            extract = tldextract.extract(answer)
+            extract = tldextract.extract(answer.decode('utf-8'))
             if extract.domain in EMPTY_VALUES or\
                extract.suffix in EMPTY_VALUES:
                 tmp_domain = ''
