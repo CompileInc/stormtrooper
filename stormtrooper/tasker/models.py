@@ -224,6 +224,7 @@ class Question(models.Model):
         if len(answers) < Task.MIN_TO_ANSWER:
             answer = ""
         else:
+            answers = [ans for ans in answers if ans != '']
             most_common = Counter(answers).most_common(1)[0]
             votes = most_common[1]
             if is_best_of:
