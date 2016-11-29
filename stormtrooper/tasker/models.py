@@ -220,15 +220,14 @@ class Question(models.Model):
     def compute_answer(self, answers, is_best_of):
         votes = None
         if self.task.answer_plugin:
-            answers = get_plugin(self.task.answer_plugin).process(answers)
+            answers = [ans for ans in get_plugin(self.task.answer_plugin).process(answers) if ans not in EMPTY_VALUES]
         if len(answers) < Task.MIN_TO_ANSWER:
             answer = ""
         else:
-            answers = [ans for ans in answers if ans != '']
             most_common = Counter(answers).most_common(1)[0]
             votes = most_common[1]
             if is_best_of:
-                cutoff = max(len(answers) // 2 + 1, Task.MIN_TO_ANSWER)
+                cutoff = max(len(answers) // 2, Task.MIN_TO_ANSWER)
                 if votes >= cutoff:
                     answer = most_common[0]
                 else:
