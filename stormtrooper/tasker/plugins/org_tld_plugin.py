@@ -1,8 +1,6 @@
 from __future__ import unicode_literals
-import logging
 from tasker.plugins import Plugin
-
-LOG = logging.getLogger(__name__)
+from django.core.validators import EMPTY_VALUES
 
 
 class WebsiteTLD(Plugin):
@@ -100,7 +98,6 @@ class FuzzyWebsiteMatch(Plugin):
         try:
             parsed = urlparse(w)
         except ValueError as e:
-            LOG.exception(e)
             return None
         else:
             new_parsed = ParseResult(scheme='http',
@@ -124,16 +121,17 @@ class FuzzyWebsiteMatch(Plugin):
             if website_tld:
                 _website_tlds.append(website_tld)
                 website_tlds[website_tld].append(w)
-        common_website_tld = cls.get_majority_item(_website_tlds)
-        if common_website_tld is None:
-            return (None, 0)
-        common_websites = website_tlds[common_website_tld]
-        common_website = cls.get_majority_item(common_websites)
-        if common_website:
-                result_website = common_website
-        else:
-            result_website = cls.normalize_website(cls.get_website_tld(common_websites[0]))
-        for website in websites:
-            if result_website in website:
-                votes += 1
+        if _website_tlds not in EMPTY_VALUES:
+            common_website_tld = cls.get_majority_item(_website_tlds)
+            if common_website_tld is None:
+                return (None, 0)
+            common_websites = website_tlds[common_website_tld]
+            common_website = cls.get_majority_item(common_websites)
+            if common_website:
+                    result_website = common_website
+            else:
+                result_website = cls.normalize_website(cls.get_website_tld(common_websites[0]))
+            for website in websites:
+                if result_website in website:
+                    votes += 1
         return (result_website, votes)

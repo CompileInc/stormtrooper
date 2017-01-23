@@ -230,6 +230,8 @@ class Question(models.Model):
                 # performs a transformation on answers, that info would be lost when
                 # trying to count votes separately
                 answer, votes = plugin.process(answers)
+                if answer in EMPTY_VALUES:
+                    answer = []
                 computed = True
             else:
                 answers = [ans for ans in get_plugin(self.task.answer_plugin).process(answers) if ans not in EMPTY_VALUES]
