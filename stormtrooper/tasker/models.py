@@ -231,7 +231,7 @@ class Question(models.Model):
                 answer, votes = plugin.process(answers)
             else:
                 answers = [ans for ans in get_plugin(self.task.answer_plugin).process(answers) if ans not in EMPTY_VALUES]
-        if not answer:
+        if not answer and not votes:
             if len(answers) < Task.MIN_TO_ANSWER:
                 answer = ""
             else:
