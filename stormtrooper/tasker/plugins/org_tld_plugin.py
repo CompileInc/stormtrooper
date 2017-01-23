@@ -1,6 +1,8 @@
 from __future__ import unicode_literals
-
+import logging
 from tasker.plugins import Plugin
+
+LOG = logging.getLogger(__name__)
 
 
 class WebsiteTLD(Plugin):
@@ -95,14 +97,19 @@ class FuzzyWebsiteMatch(Plugin):
         w = w.lower().strip()
         if not w.startswith('http://') and not w.startswith('https://'):
             w = 'http://' + w.lstrip('/')
-        parsed = urlparse(w)
-        new_parsed = ParseResult(scheme='http',
-                                 netloc=cls.get_website_tld(w),
-                                 path=parsed.path.rstrip('/'),
-                                 params='',
-                                 query=parsed.query,
-                                 fragment='')
-        return urlunparse(new_parsed)
+        try:
+            parsed = urlparse(w)
+        except ValueError as e:
+            LOG.exception(e)
+            return None
+        else:
+            new_parsed = ParseResult(scheme='http',
+                                     netloc=cls.get_website_tld(w),
+                                     path=parsed.path.rstrip('/'),
+                                     params='',
+                                     query=parsed.query,
+                                     fragment='')
+            return urlunparse(new_parsed)
 
     @classmethod
     def process(cls, answers):
@@ -114,8 +121,9 @@ class FuzzyWebsiteMatch(Plugin):
         _website_tlds = []
         for w in websites:
             website_tld = cls.get_website_tld(w)
-            _website_tlds.append(website_tld)
-            website_tlds[website_tld].append(w)
+            if website_tld:
+                _website_tlds.append(website_tld)
+                website_tlds[website_tld].append(w)
         common_website_tld = cls.get_majority_item(_website_tlds)
         if common_website_tld is None:
             return (None, 0)

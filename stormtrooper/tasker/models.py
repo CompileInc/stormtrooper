@@ -222,6 +222,7 @@ class Question(models.Model):
     def compute_answer(self, answers, is_best_of):
         answer = None
         votes = None
+        computed = False
         if self.task.answer_plugin:
             plugin = get_plugin(self.task.answer_plugin)
             if plugin.COMPUTE_ANSWER:
@@ -229,9 +230,10 @@ class Question(models.Model):
                 # performs a transformation on answers, that info would be lost when
                 # trying to count votes separately
                 answer, votes = plugin.process(answers)
+                computed = True
             else:
                 answers = [ans for ans in get_plugin(self.task.answer_plugin).process(answers) if ans not in EMPTY_VALUES]
-        if not answer and not votes:
+        if not answer and not votes and not computed:
             if len(answers) < Task.MIN_TO_ANSWER:
                 answer = ""
             else:
