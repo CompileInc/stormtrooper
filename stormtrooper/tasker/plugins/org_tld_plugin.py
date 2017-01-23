@@ -1,6 +1,5 @@
 from __future__ import unicode_literals
 from tasker.plugins import Plugin
-from django.core.validators import EMPTY_VALUES
 
 
 class WebsiteTLD(Plugin):
@@ -111,7 +110,8 @@ class FuzzyWebsiteMatch(Plugin):
     @classmethod
     def process(cls, answers):
         from collections import defaultdict
-        websites = map(cls.normalize_website, answers)
+        from django.core.validators import EMPTY_VALUES
+        websites = [w for w in map(cls.normalize_website, answers) if w is not None]
         result_website = None
         votes = 0
         website_tlds = defaultdict(list)
