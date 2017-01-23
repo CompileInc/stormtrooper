@@ -1,7 +1,12 @@
 class Plugin(object):
+    # Turn this to true if your plugin intends to compute the right answer
+    COMPUTE_ANSWER = False
+
     @classmethod
     def process(self, answers):
         '''Implement your answer normalization/manipulation here'''
+        # Plugins with COMPUTE_ANSWER = True needs to return a tuple
+        # (correct_answer, votes_for_correct_answer)
         return answers
 
 
