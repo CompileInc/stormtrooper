@@ -1,7 +1,13 @@
 class Plugin(object):
+    COMPUTE_ANSWER = False
+
     @classmethod
     def process(self, answers):
-        '''Implement your answer normalization/manipulation here'''
+        '''Implement your answer normalization/manipulation here
+
+           Plugins with COMPUTE_ANSWER = True needs to return a tuple
+           (correct_answer, votes_for_correct_answer)
+        '''
         return answers
 
 

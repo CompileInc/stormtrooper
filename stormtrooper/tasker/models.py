@@ -1,5 +1,6 @@
 from __future__ import division, unicode_literals
 from collections import Counter
+import logging
 from math import floor
 import StringIO
 import datetime
@@ -24,6 +25,7 @@ import unicodecsv as csv
 
 from .plugins import initialize_plugins, get_plugin
 
+LOG = logging.getLogger(__name__)
 
 initialize_plugins()
 
@@ -218,23 +220,32 @@ class Question(models.Model):
         return reverse('question-detail', args=[self.slug])
 
     def compute_answer(self, answers, is_best_of):
+        answer = None
         votes = None
         if self.task.answer_plugin:
-            answers = [ans for ans in get_plugin(self.task.answer_plugin).process(answers) if ans not in EMPTY_VALUES]
-        if len(answers) < Task.MIN_TO_ANSWER:
-            answer = ""
-        else:
-            most_common = Counter(answers).most_common(1)[0]
-            votes = most_common[1]
-            if is_best_of:
-                cutoff = max(len(answers) // 2, Task.MIN_TO_ANSWER)
-                if votes >= cutoff:
-                    answer = most_common[0]
-                else:
-                    votes = None
-                    answer = ""
+            plugin = get_plugin(self.task.answer_plugin)
+            if plugin.COMPUTE_ANSWER:
+                # Plugins should return answers and votes because if a plugin
+                # performs a transformation on answers, that info would be lost when
+                # trying to count votes separately
+                answer, votes = plugin.process(answers)
             else:
-                answer = most_common[0]
+                answers = [ans for ans in get_plugin(self.task.answer_plugin).process(answers) if ans not in EMPTY_VALUES]
+        if not answer and not votes:
+            if len(answers) < Task.MIN_TO_ANSWER:
+                answer = ""
+            else:
+                most_common = Counter(answers).most_common(1)[0]
+                votes = most_common[1]
+                if is_best_of:
+                    cutoff = max(len(answers) // 2, Task.MIN_TO_ANSWER)
+                    if votes >= cutoff:
+                        answer = most_common[0]
+                    else:
+                        votes = None
+                        answer = ""
+                else:
+                    answer = most_common[0]
         return {'ST_TASK_%s_ANSWER' % (self.task.id): answer,
                 'ST_TASK_%s_VOTES' % (self.task.id): votes}
 
@@ -331,7 +342,7 @@ class Export(models.Model):
             self.export_file.save(name=export_filename, content=export_file, save=False)
             self.status = self.SUCCESS
         except Exception as e:
-            print e
+            LOG.exception(e)
             self.status = self.FAILURE
         self.save()
 
