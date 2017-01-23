@@ -89,6 +89,7 @@ class FuzzyWebsiteMatch(Plugin):
     def normalize_website(cls, w):
         from django.core.validators import EMPTY_VALUES
         from urlparse import urlparse, urlunparse, ParseResult
+        w = w.decode('utf-8')
         if w in EMPTY_VALUES:
             return None
         w = w.lower().strip()
